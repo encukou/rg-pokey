@@ -10,6 +10,7 @@ from regeneration.pokey import messages
 from regeneration.pokey.monster import Monster
 from regeneration.pokey.effects import MajorAilment
 from regeneration.pokey.abilityeffects import ability_effect_registry
+from regeneration.pokey.itemeffects import item_effect_registry
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -25,6 +26,9 @@ class Battler(BaseBattler):
 
     def get_ability_effect(self):
         return ability_effect_registry[self.ability](self.ability)
+
+    def get_item_effect(self):
+        return item_effect_registry[self.item](self.item)
 
 class Field(BaseField):
     BattlerClass = Battler

@@ -62,3 +62,12 @@ class Trace(AbilityEffect):
                     pass
                 else:
                     send_out(battler)
+
+@register
+class Technician(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if hit.user is self.subject and power <= 60:
+            return power * 3 // 2
+        else:
+            return power

@@ -21,6 +21,12 @@ move_effect_registry = registry = MoveRegistry()
 class Tackle(MoveEffect):
     pass
 
+@registry.put(11)
+class Sharpen(MoveEffect):
+    def use(self, **kwargs):
+        raised_stat = self.field.loader.load_stat('attack')
+        self.user.raise_stat(raised_stat, +1, verbose=True)
+
 @registry.put(37)
 class TriAttack(MoveEffect):
     def do_secondary_effect(self, hit):
