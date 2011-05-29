@@ -12,11 +12,17 @@ __license__ = 'MIT'
 __email__ = 'encukou@gmail.com'
 
 class DamageModifierOrder(object):
+
+    # Reference: http://www.smogon.com/dp/articles/damage_formula
+
+    (helping_hand, item, charge, mud_sport, water_sport, user_ability,
+        target_ability) = OrderKeys(7)
+
     burn, reflect, double, weather, flashfire = orderkeys.mod1.new_after(5)
 
 class EndTurnOrder(object):
 
-    #Reference: http://www.smogon.com/forums/showthread.php?t=79340
+    # Reference: http://www.smogon.com/forums/showthread.php?t=79340
 
     (effect_end, wish, weather, weather_heal_ability, gravity, general,
         future_sight, perish_song, trick_room) = checkpoints = OrderKeys(9)
@@ -32,13 +38,18 @@ class EndTurnOrder(object):
         ) = OrderKeys(19)
 
     @staticmethod
-    def speed_key(major_tier, minor_tier):
+    def speed_key(major_tier, minor_tier=None):
         """Decorator for end-of-turn effects.
 
         Sort by major tier, then the subject speed, then the minor tier
         """
         def key(effect):
-            return major_tier, -effect.subject.stats.speed, minor_tier
+            try:
+                speed = effect.subject.stats.speed
+            except AttributeError:
+                return major_tier, minor_tier
+            else:
+                return major_tier, -speed, minor_tier
         return Effect.orderkey(key)
 
 class SwitchInDamage(object):

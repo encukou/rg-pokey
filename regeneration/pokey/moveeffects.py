@@ -4,6 +4,7 @@
 from regeneration.battle.moveeffect import MoveEffect
 
 from regeneration.pokey import effects
+from regeneration.pokey import messages
 from regeneration.pokey.registry import Registry
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
@@ -33,3 +34,21 @@ class TriAttack(MoveEffect):
             if effect:
                 self.field.message(effect.messages.Applied,
                         battler=effect.subject)
+
+@registry.put(255)
+class Struggle(MoveEffect):
+    def hit(self, hit):
+        super(Struggle, self).hit(hit)
+        self.user.do_damage(self.user.stats.hp // 4,
+                message_class=messages.Recoil)
+
+@registry.put(260)
+class TrickRoom(MoveEffect):
+    def use(self, **kwargs):
+        existing_effect = self.field.get_effect(effects.TwistedDimensions)
+        if existing_effect:
+            existing_effect.remove()
+            self.field.message(messages.NormalDimensions)
+        else:
+            self.user.give_effect(self.field, effects.TwistedDimensions())
+            self.field.message(messages.TwistedDimensions, battler=self.user)

@@ -4,6 +4,7 @@
 from regeneration.battle.effect import Effect
 
 from regeneration.pokey.registry import EntityRegistry
+from regeneration.pokey import orderkeys
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -29,6 +30,17 @@ class Download(AbilityEffect):
             else:
                 raised_stat = self.field.loader.load_stat('special-attack')
             battler.raise_stat(raised_stat, +1, verbose=True)
+
+@register
+class Swarm(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if (hit.type.identifier == 'bug' and
+                hit.user is self.subject and
+                hit.user.hp * 3 <= hit.user.stats.hp):
+            return power * 3 // 2
+        else:
+            return power
 
 @register
 class Trace(AbilityEffect):

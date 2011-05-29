@@ -63,3 +63,13 @@ class Freeze(object):
     class Heal(Message):
         message = "{battler} thawed out!"
         battler = MessageArgument()
+
+class TwistedDimensions(Message):
+    message = "{battler} twisted the dimensions!"
+    battler = MessageArgument()
+
+class NormalDimensions(Message):
+    message = "The twisted dimensions returned to normal."
+
+class Recoil(HPChange):
+    message = "{battler} is hurt by recoil!"

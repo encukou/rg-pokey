@@ -106,3 +106,19 @@ class Freeze(MajorAilment):
             else:
                 self.field.message(self.messages.PreventUse, battler=subject)
                 return True
+
+class TwistedDimensions(Effect):
+    def effect_applied(self, effect):
+        if effect is self:
+            self.counter = 5
+
+    def speed_factor(self, field, speed_factor):
+        return -1
+
+    @EndTurnOrder.speed_key(EndTurnOrder.trick_room)
+    def end_turn(self, field):
+        self.counter -= 1
+        if self.counter <= 0:
+            self.remove()
+            self.field.message(messages.NormalDimensions)
+
