@@ -6,7 +6,9 @@ from fractions import Fraction
 
 from regeneration.battle.effect import Effect
 
+from regeneration.pokey import messages
 from regeneration.pokey.registry import EntityRegistry
+from regeneration.pokey.orderkeys import EndTurnOrder
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -37,3 +39,11 @@ class Brightpowder(ItemEffect):
             return accuracy * Fraction(9, 10)
         else:
             return accuracy
+
+@register
+class Leftovers(ItemEffect):
+    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.heal_item)
+    def end_turn(self, field):
+        if self.subject.hp < self.subject.stats.hp:
+            self.subject.change_hp(self.subject.stats.hp // 16,
+                    message_class=messages.ItemHeal, item=self.item)

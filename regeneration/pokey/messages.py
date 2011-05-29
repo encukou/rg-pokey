@@ -68,3 +68,18 @@ class NormalDimensions(Message):
 
 class Recoil(HPChange):
     message = "{battler} is hurt by recoil!"
+
+class ItemHeal(HPChange):
+    message = "{battler}'s {item} restored its HP a little!"
+    item = MessageArgument()
+
+class ConvertedType(Message):
+    message = "{battler} transformed to the {new_type} type!"
+    battler = MessageArgument()
+    new_type = MessageArgument()
+    moveeffect = MessageArgument()
+
+class AnnouncePressure(Message):
+    message = "{battler} is exerting its {ability}!"
+    battler = MessageArgument()
+    ability = MessageArgument()

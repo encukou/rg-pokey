@@ -32,6 +32,19 @@ class Download(AbilityEffect):
             battler.raise_stat(raised_stat, +1, verbose=True)
 
 @register
+class Pressure(AbilityEffect):
+    def send_out(self, battler):
+        if battler == self.subject:
+            self.field.message.AnnouncePressure(battler=battler,
+                    ability=self.ability)
+
+    def pp_reduction(self, moveeffect, pp_reduction):
+        if self.subject in moveeffect.targets:
+            return pp_reduction + 1
+        else:
+            return pp_reduction
+
+@register
 class Swarm(AbilityEffect):
     @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
     def modify_base_power(self, hit, power):

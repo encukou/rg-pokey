@@ -27,6 +27,22 @@ class Sharpen(MoveEffect):
         raised_stat = self.field.loader.load_stat('attack')
         self.user.raise_stat(raised_stat, +1, verbose=True)
 
+@registry.put(31)
+class Conversion(MoveEffect):
+    def use(self, **kwargs):
+        eligible_types = []
+        for move in self.user.moves:
+            if move.type not in self.user.types:
+                eligible_types.append(move.type)
+        if eligible_types:
+            new_type = self.field.random_choice(eligible_types,
+                    "Select type to convert to")
+            self.user.types = [new_type]
+            self.field.message(messages.ConvertedType, battler=self.user,
+                    new_type=new_type, moveeffect=self)
+        else:
+            self.fail()
+
 @registry.put(37)
 class TriAttack(MoveEffect):
     def do_secondary_effect(self, hit):
