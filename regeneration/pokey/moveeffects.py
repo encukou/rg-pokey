@@ -43,6 +43,10 @@ class TriAttack(MoveEffect):
 
 @registry.put(255)
 class Struggle(MoveEffect):
+    def __init__(self, *args, **kwargs):
+        super(Struggle, self).__init__(*args, **kwargs)
+        self.type = None
+
     def hit(self, hit):
         super(Struggle, self).hit(hit)
         self.user.do_damage(self.user.stats.hp // 4,

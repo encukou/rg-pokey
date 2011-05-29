@@ -15,11 +15,14 @@ __email__ = 'encukou@gmail.com'
 
 class MajorAilment(Effect):
     class_by_code = {}
+    immune_type_identifiers = ()
 
     # Reference: http://www.smogon.com/dp/articles/status
 
     def block_application(self, effect):
-        if effect is self and self.subject.get_effect(MajorAilment):
+        if effect is self and self.subject.get_effect(MajorAilment) or any(
+                t.identifier in self.immune_type_identifiers for t in
+                self.subject.types):
             return True
 
     def effect_applied(self, effect):
@@ -68,13 +71,14 @@ class Paralysis(MajorAilment):
 
 @MajorAilment.register('brn')
 class Burn(MajorAilment):
-    # XXX: Fire-type Pokémon, as well as Pokémon with the ability Leaf Guard
-    # (in bright sunlight) or Water Veil are unaffected by burns.
+    # XXX: Pokémon with the ability Leaf Guard (in bright sunlight) or Water
+    # Veil are unaffected by burns.
     # XXX: Pokemon with Heatproof take only 6.25% damage per turn
     # XXX: When a Pokémon with the ability Magic Guard is burned, it does not
     # lose health, though its physical damage still drops.
 
     messages = messages.Burn
+    immune_type_identifiers = ['fire']
 
     @Effect.orderkey(orderkeys.DamageModifierOrder.burn)
     def modify_move_damage(self, target, damage, hit):
@@ -92,10 +96,10 @@ class Burn(MajorAilment):
 @MajorAilment.register('frz')
 class Freeze(MajorAilment):
     # XXX: Pokémon with the ability Magma Armor are immune to [...] freeze
-    # XXX: no freezing Ice-types
     # No Pokémon can be frozen while the sun is bright.
 
     messages = messages.Freeze
+    immune_type_identifiers = ['ice']
 
     def prevent_use(self, move_effect):
         subject = self.subject

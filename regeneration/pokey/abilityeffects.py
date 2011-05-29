@@ -35,7 +35,7 @@ class Download(AbilityEffect):
 class Swarm(AbilityEffect):
     @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
     def modify_base_power(self, hit, power):
-        if (hit.type.identifier == 'bug' and
+        if (hit.type and hit.type.identifier == 'bug' and
                 hit.user is self.subject and
                 hit.user.hp * 3 <= hit.user.stats.hp):
             return power * 3 // 2

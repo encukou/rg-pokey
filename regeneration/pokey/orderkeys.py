@@ -49,6 +49,7 @@ class EndTurnOrder(object):
             except AttributeError:
                 return major_tier, minor_tier
             else:
+                speed *= Effect.speed_factor(effect, 1)
                 return major_tier, -speed, minor_tier
         return Effect.orderkey(key)
 

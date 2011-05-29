@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 # Encoding: UTF-8
 
-from pokedex.db.tables import Stat as _Stat, Ability as _Ability
+from pokedex.db.tables import (Stat as _Stat, Ability as _Ability,
+        Type as _Type, Item as _Item)
 
 from regeneration.battle.messages import *
 
@@ -9,19 +10,13 @@ __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
 __email__ = 'encukou@gmail.com'
 
-@multimethod(_Stat, object)
-def message_values(stat, trainer):
-    return dict(
-            name=stat.name,
-            identifier=stat.identifier,
-        )
-
-@multimethod(_Ability, object)
-def message_values(ability, trainer):
-    return dict(
-            name=ability.name,
-            identifier=ability.identifier,
-        )
+for cls in _Stat, _Ability, _Type, _Item:
+    @multimethod(cls, object)
+    def message_values(entity, trainer):
+        return dict(
+                name=entity.name,
+                identifier=entity.identifier,
+            )
 
 class Trace(GainAbility):
     message = "{battler} traced {opponent}'s {ability}"
