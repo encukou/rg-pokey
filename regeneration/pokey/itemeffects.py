@@ -16,7 +16,7 @@ __email__ = 'encukou@gmail.com'
 
 class ItemRegistry(EntityRegistry):
     def get_key(self, item):
-        if any(f.identifier == 'holdable' for f in item.flags):
+        if item and any(f.identifier == 'holdable' for f in item.flags):
             return super(ItemRegistry, self).get_key(item)
         else:
             return 'no-item'
@@ -39,6 +39,14 @@ class Brightpowder(ItemEffect):
             return accuracy * Fraction(9, 10)
         else:
             return accuracy
+
+@register
+class RazorClaw(ItemEffect):
+    def critical_hit_stage(self, hit, stage):
+        if hit.user is self.subject:
+            return stage + 1
+        else:
+            return stage
 
 @register
 class Leftovers(ItemEffect):

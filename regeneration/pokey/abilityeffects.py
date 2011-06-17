@@ -4,6 +4,7 @@
 from regeneration.battle.effect import Effect
 
 from regeneration.pokey.registry import EntityRegistry
+from regeneration.pokey import effects
 from regeneration.pokey import orderkeys
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
@@ -30,6 +31,19 @@ class Download(AbilityEffect):
             else:
                 raised_stat = self.field.loader.load_stat('special-attack')
             battler.raise_stat(raised_stat, +1, verbose=True)
+
+@register
+class Limber(AbilityEffect):
+    def block_application(self, effect):
+        if effect.subject is self.subject and isinstance(effect,
+                effects.Paralysis):
+            return True
+
+    def effect_applied(self, effect):
+        if effect is self:
+            paralysis = self.subject.get_effect(effects.Paralysis)
+            if paralysis:
+                paralysis.remove()
 
 @register
 class Pressure(AbilityEffect):

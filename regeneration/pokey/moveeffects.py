@@ -17,15 +17,19 @@ class MoveRegistry(Registry):
 
 move_effect_registry = registry = MoveRegistry()
 
+class UserStatBoostMove(MoveEffect):
+    def use(self, **kwargs):
+        raised_stat = self.field.loader.load_stat(self.stat_identifier)
+        self.user.raise_stat(raised_stat, self.delta, verbose=True)
+
 @registry.put(1)
 class Tackle(MoveEffect):
     pass
 
 @registry.put(11)
-class Sharpen(MoveEffect):
-    def use(self, **kwargs):
-        raised_stat = self.field.loader.load_stat('attack')
-        self.user.raise_stat(raised_stat, +1, verbose=True)
+class Sharpen(UserStatBoostMove):
+    stat_identifier = 'attack'
+    delta = +1
 
 @registry.put(31)
 class Conversion(MoveEffect):
@@ -56,6 +60,11 @@ class TriAttack(MoveEffect):
             if effect:
                 self.field.message(effect.messages.Applied,
                         battler=effect.subject)
+
+@registry.put(53)
+class Agility(UserStatBoostMove):
+    stat_identifier = 'speed'
+    delta = +2
 
 @registry.put(255)
 class Struggle(MoveEffect):

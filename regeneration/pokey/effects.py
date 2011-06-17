@@ -125,4 +125,3 @@ class TwistedDimensions(Effect):
         if self.counter <= 0:
             self.remove()
             self.field.message(messages.NormalDimensions)
-
