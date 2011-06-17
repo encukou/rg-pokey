@@ -49,6 +49,14 @@ class RazorClaw(ItemEffect):
             return stage
 
 @register
+class LaxIncense(ItemEffect):
+    def modify_accuracy(self, hit, accuracy):
+        if hit.target is self.subject:
+            return accuracy * Fraction(19, 20)
+        else:
+            return accuracy
+
+@register
 class Leftovers(ItemEffect):
     @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.heal_item)
     def end_turn(self, field):

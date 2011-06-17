@@ -83,3 +83,7 @@ class AnnouncePressure(Message):
     message = "{battler} is exerting its {ability}!"
     battler = MessageArgument()
     ability = MessageArgument()
+
+class ShedSkin(Message):
+    message = "{battler} shed its skin!"
+    battler = MessageArgument()

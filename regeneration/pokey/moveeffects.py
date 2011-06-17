@@ -22,6 +22,19 @@ class UserStatBoostMove(MoveEffect):
         raised_stat = self.field.loader.load_stat(self.stat_identifier)
         self.user.raise_stat(raised_stat, self.delta, verbose=True)
 
+class ConversionMove(MoveEffect):
+    def convert(self, possible_types):
+        possible_types = list(t for t in possible_types if
+                t not in self.user.types)
+        if possible_types:
+            new_type = self.field.random_choice(possible_types,
+                    "Select type to convert to")
+            self.user.types = [new_type]
+            self.field.message(messages.ConvertedType, battler=self.user,
+                    new_type=new_type, moveeffect=self)
+        else:
+            self.fail()
+
 @registry.put(1)
 class Tackle(MoveEffect):
     pass
@@ -32,20 +45,9 @@ class Sharpen(UserStatBoostMove):
     delta = +1
 
 @registry.put(31)
-class Conversion(MoveEffect):
-    def use(self, **kwargs):
-        eligible_types = []
-        for move in self.user.moves:
-            if move.type not in self.user.types:
-                eligible_types.append(move.type)
-        if eligible_types:
-            new_type = self.field.random_choice(eligible_types,
-                    "Select type to convert to")
-            self.user.types = [new_type]
-            self.field.message(messages.ConvertedType, battler=self.user,
-                    new_type=new_type, moveeffect=self)
-        else:
-            self.fail()
+class Conversion(ConversionMove):
+    def use(self):
+        self.convert(m.type for m in self.user.moves)
 
 @registry.put(37)
 class TriAttack(MoveEffect):
@@ -65,6 +67,20 @@ class TriAttack(MoveEffect):
 class Agility(UserStatBoostMove):
     stat_identifier = 'speed'
     delta = +2
+
+@registry.put(94)
+class Conversion2(ConversionMove):
+    def hit(self, hit):
+        try:
+            last_type = hit.target.used_move_effects[-1].type
+        except IndexError:
+            self.fail()
+        else:
+            if last_type:
+                self.convert(e.target_type for e in last_type.damage_efficacies
+                        if e.damage_factor < 100)
+            else:
+                self.fail()
 
 @registry.put(255)
 class Struggle(MoveEffect):

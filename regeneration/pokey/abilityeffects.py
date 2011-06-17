@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # Encoding: UTF-8
 
+from fractions import Fraction
+
 from regeneration.battle.effect import Effect
 
 from regeneration.pokey.registry import EntityRegistry
@@ -57,6 +59,18 @@ class Pressure(AbilityEffect):
             return pp_reduction + 1
         else:
             return pp_reduction
+
+@register
+class ShedSkin(AbilityEffect):
+    @orderkeys.EndTurnOrder.speed_key(
+            orderkeys.EndTurnOrder.general,
+            orderkeys.EndTurnOrder.speed_boost_shed_skin)
+    def end_turn(self, field):
+        ailment = self.subject.get_effect(effects.MajorAilment)
+        if (ailment and
+                self.field.flip_coin(Fraction(3, 10), 'Shed skin check')):
+            self.field.message.ShedSkin(battler=self.subject)
+            ailment.remove()
 
 @register
 class Swarm(AbilityEffect):
