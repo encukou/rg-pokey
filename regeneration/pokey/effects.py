@@ -14,6 +14,16 @@ __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
 __email__ = 'encukou@gmail.com'
 
+class DaemonEffect(Effect):
+    def _checkpoints(effect):
+        for c in EndTurnOrder.checkpoints:
+            yield c, 1e10, 0
+
+    @Effect.orderkey(_checkpoints)
+    def end_turn(self, field):
+        if field.check_win():
+            return True
+
 class MajorAilment(Effect):
     class_by_code = {}
     immune_type_identifiers = ()

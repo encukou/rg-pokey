@@ -3,12 +3,12 @@
 
 from regeneration.battle.battler import Battler as BaseBattler
 from regeneration.battle.field import Field as BaseField
-from regeneration.battle.rules import (Rules, ValidationClause,
+from regeneration.battle.rules import (Rules, Clause, ValidationClause,
     ValidationError, MonsterValidationError, MoveValidationError)
 
 from regeneration.pokey import messages
 from regeneration.pokey.monster import Monster
-from regeneration.pokey.effects import MajorAilment
+from regeneration.pokey.effects import MajorAilment, DaemonEffect
 from regeneration.pokey.abilityeffects import ability_effect_registry
 from regeneration.pokey.itemeffects import item_effect_registry
 
@@ -48,9 +48,13 @@ class GenerationValidationClause(ValidationClause):
         if move.generation != self.rules.loader.generation:
             raise MoveValidationError('%s is from a wrong generation' % move)
 
+class DaemonEffectClause(Clause):
+    def init_battle(self, field):
+        field.give_effect_self(DaemonEffect())
+
 class PokeyRules(Rules):
     MonsterClass = Monster
     FieldClass = Field
 
     default_clause_classes = Rules.default_clause_classes + [
-            GenerationValidationClause]
+            GenerationValidationClause, DaemonEffectClause]
