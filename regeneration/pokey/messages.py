@@ -43,6 +43,10 @@ class Burn(object):
         message = "{battler} was burned!"
         battler = MessageArgument()
 
+    class ItemApplied(Applied):
+        message = "{battler}'s {item} activated!"
+        item = MessageArgument()
+
     class Hurt(HPChange):
         message = "{battler} was hurt by its burn!"
 
@@ -57,6 +61,23 @@ class Freeze(object):
 
     class Heal(Message):
         message = "{battler} thawed out!"
+        battler = MessageArgument()
+
+class Confusion(object):
+    class Applied(Message):
+        message = "{battler} was confused!"
+        battler = MessageArgument()
+
+    class Hurt(Message):
+        message = "{battler} hurt itself in its confusion!"
+        battler = MessageArgument()
+
+    class Tick(Message):
+        message = "{battler} is confused!"
+        battler = MessageArgument()
+
+    class Heal(Message):
+        message = "{battler} cnapped out of confusion!"
         battler = MessageArgument()
 
 class TwistedDimensions(Message):

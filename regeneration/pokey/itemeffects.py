@@ -7,6 +7,7 @@ from fractions import Fraction
 from regeneration.battle.effect import Effect
 
 from regeneration.pokey import messages
+from regeneration.pokey import effects
 from regeneration.pokey.registry import EntityRegistry
 from regeneration.pokey.orderkeys import EndTurnOrder
 
@@ -39,6 +40,15 @@ class Brightpowder(ItemEffect):
             return accuracy * Fraction(9, 10)
         else:
             return accuracy
+
+@register
+class FlameOrb(ItemEffect):
+    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.orb)
+    def end_turn(self, field):
+        effect = self.subject.give_effect_self(effects.Burn())
+        if effect:
+            self.field.message(messages.Burn.ItemApplied,
+                    battler=effect.subject, item=self.item)
 
 @register
 class RazorClaw(ItemEffect):

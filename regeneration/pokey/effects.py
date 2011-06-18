@@ -4,6 +4,7 @@
 from fractions import Fraction
 
 from regeneration.battle.effect import Effect
+from regeneration.battle.moveeffect import MoveEffect, Hit
 
 from regeneration.pokey import orderkeys
 from regeneration.pokey.orderkeys import EndTurnOrder
@@ -110,6 +111,51 @@ class Freeze(MajorAilment):
             else:
                 self.field.message(self.messages.PreventUse, battler=subject)
                 return True
+
+class Confusion(Effect):
+    def block_application(self, effect):
+        if effect is self and self.subject.get_effect(Confusion):
+            return True
+
+    def effect_applied(self, effect):
+        if effect is self:
+            self.counter = self.field.randint(2, 5, "Confusion duration")
+
+    def prevent_use(self, move_effect):
+        subject = self.subject
+        if move_effect.user is subject:
+            self.counter -= 1
+            if self.counter <= 0:
+                self.field.message(messages.Confusion.Heal, battler=subject)
+                self.remove()
+            else:
+                self.field.message(messages.Confusion.Tick, battler=subject)
+                if self.field.flip_coin(Fraction(1, 2), "Confusion check"):
+                    self.field.message(messages.Confusion.Hurt,
+                            battler=subject)
+                    fake_move_effect = self.ConfusionHurtEffect(subject)
+                    fake_move_effect.do_damage(Hit(fake_move_effect, subject))
+                    return True
+
+    class ConfusionHurtEffect(MoveEffect):
+        def __init__(self, user):
+            self.move = None
+            self.power = 40
+            self.field = user.field
+            self.target = self.user = user
+            self.accuracy = self.type = self.secondary_effect_chance = None
+            self.damage_class = user.field.loader.load_damage_class('physical')
+            self.flags = self.flags.union([self.ppless])
+
+        @property
+        def name(self):
+            return '<confusion>'
+
+        def determine_critical_hit(self, hit):
+            hit.is_critical = False
+
+        def message_values(self, trainer):
+            return {'name': '<confusion>', 'target': self.target}
 
 class TwistedDimensions(Effect):
     def effect_applied(self, effect):

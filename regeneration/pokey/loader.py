@@ -66,6 +66,7 @@ class Loader(object):
     load_ability = _loader(tables.Ability)
     load_item = _loader(tables.Item)
     load_stat = _loader(tables.Stat)
+    load_damage_class = _loader(tables.MoveDamageClass)
 
     def load_struggle(self):
         return self.load_move('struggle')

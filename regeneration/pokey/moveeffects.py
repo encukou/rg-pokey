@@ -68,6 +68,15 @@ class Agility(UserStatBoostMove):
     stat_identifier = 'speed'
     delta = +2
 
+@registry.put(77)
+class Confusion(MoveEffect):
+    def do_secondary_effect(self, hit):
+        if not hit.target.fainted:
+            effect = self.user.give_effect(hit.target, effects.Confusion())
+            if effect:
+                self.field.message(messages.Confusion.Applied,
+                        battler=effect.subject)
+
 @registry.put(94)
 class Conversion2(ConversionMove):
     def hit(self, hit):

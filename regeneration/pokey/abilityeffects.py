@@ -20,6 +20,18 @@ class AbilityEffect(Effect):
     def __init__(self, ability):
         self.ability = ability
 
+class AilmentPreventingAbility(AbilityEffect):
+    def block_application(self, effect):
+        if effect.subject is self.subject and isinstance(effect,
+                self.effect_class):
+            return True
+
+    def effect_applied(self, applied_effect):
+        if applied_effect is self:
+            removed_effect = self.subject.get_effect(self.effect_class)
+            if removed_effect:
+                removed_effect.remove()
+
 @register
 class Download(AbilityEffect):
     def send_out(self, battler):
@@ -35,17 +47,12 @@ class Download(AbilityEffect):
             battler.raise_stat(raised_stat, +1, verbose=True)
 
 @register
-class Limber(AbilityEffect):
-    def block_application(self, effect):
-        if effect.subject is self.subject and isinstance(effect,
-                effects.Paralysis):
-            return True
+class Limber(AilmentPreventingAbility):
+    effect_class = effects.Paralysis
 
-    def effect_applied(self, effect):
-        if effect is self:
-            paralysis = self.subject.get_effect(effects.Paralysis)
-            if paralysis:
-                paralysis.remove()
+@register
+class OwnTempo(AilmentPreventingAbility):
+    effect_class = effects.Confusion
 
 @register
 class Pressure(AbilityEffect):
