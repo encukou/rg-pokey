@@ -119,6 +119,11 @@ class Freeze(MajorAilment):
                 self.field.message(self.messages.PreventUse, battler=subject)
                 return True
 
+@MajorAilment.register('psn')
+class Poison(MajorAilment):
+    # XXX: Dummy for now
+    pass
+
 class Confusion(Effect):
     def block_application(self, effect):
         if effect is self and self.subject.get_effect(Confusion):

@@ -91,6 +91,24 @@ class Swarm(AbilityEffect):
             return power
 
 @register
+class Synchronize(AbilityEffect):
+    def effect_applied(self, effect):
+        classes = effects.Burn, effects.Paralysis, effects.Poison
+        if effect.subject is self.subject and isinstance(effect, classes):
+            effect_class = type(effect)
+            effect = self.subject.give_effect(effect.inducer, effect_class())
+            if effect:
+                self.field.message.Synchronize(
+                        synchronizer=self.subject,
+                        battler=effect.subject,
+                        effect=effect,
+                        ability=self.ability,
+                    )
+                self.field.message(effect.messages.Applied,
+                        battler=effect.subject)
+
+
+@register
 class Trace(AbilityEffect):
     def send_out(self, battler):
         # XXX: This ability cannot copy Multitype (or Trace)

@@ -9,7 +9,7 @@ from regeneration.battle.effect import Effect
 from regeneration.pokey import messages
 from regeneration.pokey import effects
 from regeneration.pokey.registry import EntityRegistry
-from regeneration.pokey.orderkeys import EndTurnOrder
+from regeneration.pokey.orderkeys import EndTurnOrder, DamageModifierOrder
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -73,3 +73,13 @@ class Leftovers(ItemEffect):
         if self.subject.hp < self.subject.stats.hp:
             self.subject.change_hp(self.subject.stats.hp // 16,
                     message_class=messages.ItemHeal, item=self.item)
+
+@register
+class WiseGlasses(ItemEffect):
+    @Effect.orderkey(DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if (hit.user is self.subject and
+                hit.damage_class.identifier == 'physical'):
+            return power * 11 // 10
+        else:
+            return power

@@ -120,3 +120,13 @@ class AnnouncePressure(Message):
 class ShedSkin(Message):
     message = "{battler} shed its skin!"
     battler = MessageArgument()
+
+class Recover(HPChange):
+    message = "{battler} regained health!"
+
+class Synchronize(Message):
+    message = "{synchronizer}'s {ability} also changes {battler}'s status!"
+    synchronizer = MessageArgument()
+    battler = MessageArgument()
+    effect = MessageArgument()
+    ability = MessageArgument()

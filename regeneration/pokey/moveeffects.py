@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # Encoding: UTF-8
 
+from __future__ import division
+
 from regeneration.battle.moveeffect import MoveEffect
 
 from regeneration.pokey import effects
@@ -48,6 +50,16 @@ class Sharpen(UserStatBoostMove):
 class Conversion(ConversionMove):
     def use(self):
         self.convert(m.type for m in self.user.moves)
+
+@registry.put(33)
+class Recover(MoveEffect):
+    def use(self):
+        if self.user.hp == self.user.stats.hp:
+            self.fail()
+        else:
+            # Rounded up for some reason...
+            amount = int(self.user.stats.hp / 2 + 0.5)
+            self.user.change_hp(amount, message_class=messages.Recover)
 
 @registry.put(37)
 class TriAttack(MoveEffect):
