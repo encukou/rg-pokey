@@ -55,3 +55,7 @@ class EndTurnOrder(object):
 
 class SwitchInDamage(object):
     toxic_spikes, spikes, stealth_rock = OrderKeys(3)
+
+class PreventOrder(object):
+    (immobile, truant, disable, imprison, heal_block, confusion, flinch, taunt,
+            gravity, attract, paralysis) = OrderKeys(11)

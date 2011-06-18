@@ -68,6 +68,7 @@ class Paralysis(MajorAilment):
         else:
             return value
 
+    @Effect.orderkey(orderkeys.PreventOrder.paralysis)
     def prevent_use(self, move_effect):
         subject = self.subject
         if move_effect.user is subject:
@@ -107,6 +108,7 @@ class Freeze(MajorAilment):
     messages = messages.Freeze
     immune_type_identifiers = ['ice']
 
+    @Effect.orderkey(orderkeys.PreventOrder.immobile)
     def prevent_use(self, move_effect):
         subject = self.subject
         if move_effect.user is subject:
@@ -126,6 +128,7 @@ class Confusion(Effect):
         if effect is self:
             self.counter = self.field.randint(2, 5, "Confusion duration")
 
+    @Effect.orderkey(orderkeys.PreventOrder.confusion)
     def prevent_use(self, move_effect):
         subject = self.subject
         if move_effect.user is subject:
