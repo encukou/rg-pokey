@@ -31,52 +31,64 @@ class DownloadActivated(Message):
 
 class Paralysis(object):
     class Applied(Message):
+        registry_name = 'Paralysis.Applied'
         message = "{battler} was paralyzed! It may be unable to attack!"
         battler = MessageArgument()
 
     class PreventUse(Message):
+        registry_name = 'Paralysis.PreventUse'
         message = "{battler} is fully paralyzed! It can't move!"
         battler = MessageArgument()
 
 class Burn(object):
     class Applied(Message):
+        registry_name = 'Burn.Applied'
         message = "{battler} was burned!"
         battler = MessageArgument()
 
     class ItemApplied(Applied):
+        registry_name = 'Burn.ItemApplied'
         message = "{battler}'s {item} activated!"
         item = MessageArgument()
 
     class Hurt(HPChange):
+        registry_name = 'Burn.Hurt'
         message = "{battler} was hurt by its burn!"
 
 class Freeze(object):
     class Applied(Message):
+        registry_name = 'Freeze.Applied'
         message = "{battler} was frozen solid!"
         battler = MessageArgument()
 
     class PreventUse(Message):
+        registry_name = 'Freeze.PreventUse'
         message = "{battler} is frozen solid!"
         battler = MessageArgument()
 
     class Heal(Message):
+        registry_name = 'Freeze.Heal'
         message = "{battler} thawed out!"
         battler = MessageArgument()
 
 class Confusion(object):
     class Applied(Message):
+        registry_name = 'Confusion.Applied'
         message = "{battler} was confused!"
         battler = MessageArgument()
 
     class Hurt(Message):
+        registry_name = 'Confusion.Hurt'
         message = "{battler} hurt itself in its confusion!"
         battler = MessageArgument()
 
     class Tick(Message):
+        registry_name = 'Confusion.Tick'
         message = "{battler} is confused!"
         battler = MessageArgument()
 
     class Heal(Message):
+        registry_name = 'Confusion.Heal'
         message = "{battler} cnapped out of confusion!"
         battler = MessageArgument()
 

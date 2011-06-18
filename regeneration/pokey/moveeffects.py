@@ -58,10 +58,9 @@ class TriAttack(MoveEffect):
                     effects.Burn,
                     effects.Freeze,
                 ], "Choose the Tri Attack effect")
-            effect = self.user.give_effect(hit.target, effect_class())
-            if effect:
-                self.field.message(effect.messages.Applied,
-                        battler=effect.subject)
+            effect = self.user.give_effect(hit.target, effect_class(),
+                    message_class=effect_class.messages.Applied,
+                    battler=hit.target)
 
 @registry.put(53)
 class Agility(UserStatBoostMove):

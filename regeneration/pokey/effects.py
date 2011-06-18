@@ -48,6 +48,11 @@ class MajorAilment(Effect):
             return effect_class
         return decorator
 
+    def message_values(self, trainer=None):
+        return dict(
+                effect_type=type(self).__name__,
+            )
+
 @MajorAilment.register('par')
 class Paralysis(MajorAilment):
     # XXX: Pokémon with the abilities Limber and Leaf Guard (during bright
@@ -155,7 +160,10 @@ class Confusion(Effect):
             hit.is_critical = False
 
         def message_values(self, trainer):
-            return {'name': '<confusion>', 'target': self.target}
+            return {
+                    'name': '<confusion>',
+                    'target': self.target.message_values(trainer),
+                }
 
 class TwistedDimensions(Effect):
     def effect_applied(self, effect):
