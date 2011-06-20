@@ -89,7 +89,7 @@ class Confusion(object):
 
     class Heal(Message):
         registry_name = 'Confusion.Heal'
-        message = "{battler} cnapped out of confusion!"
+        message = "{battler} snapped out of confusion!"
         battler = MessageArgument()
 
 class TwistedDimensions(Message):
