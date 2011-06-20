@@ -98,7 +98,7 @@ class Burn(MajorAilment):
     immune_type_identifiers = ['fire']
 
     @Effect.orderkey(orderkeys.DamageModifierOrder.burn)
-    def modify_move_damage(self, target, damage, hit):
+    def modify_move_damage(self, hit, damage):
         damage_class = hit.move_effect.damage_class
         if hit.user is self.subject and damage_class.identifier == 'physical':
             return damage // 2
@@ -197,3 +197,12 @@ class TwistedDimensions(Effect):
         if self.counter <= 0:
             self.remove()
             self.field.message(messages.NormalDimensions)
+
+class ChoiceLock(Effect):
+    def __init__(self, locked_move):
+        self.locked_move = locked_move
+
+    def prevent_move_selection(self, command):
+        if (command.battler is self.subject and
+                command.move != self.locked_move):
+            return True

@@ -130,3 +130,8 @@ class Synchronize(Message):
     battler = MessageArgument()
     effect = MessageArgument()
     ability = MessageArgument()
+
+class Sturdy(Message):
+    message = "{battler} held on thanks to {ability}!"
+    battler = MessageArgument()
+    ability = MessageArgument()

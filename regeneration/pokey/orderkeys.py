@@ -20,6 +20,8 @@ class DamageModifierOrder(object):
 
     burn, reflect, double, weather, flashfire = orderkeys.mod1.new_after(5)
 
+    sturdy = orderkeys.mod3.new_after()
+
 class EndTurnOrder(object):
 
     # Reference: http://www.smogon.com/forums/showthread.php?t=79340

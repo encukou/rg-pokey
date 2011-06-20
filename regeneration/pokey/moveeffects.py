@@ -19,10 +19,16 @@ class MoveRegistry(Registry):
 
 move_effect_registry = registry = MoveRegistry()
 
-class UserStatBoostMove(MoveEffect):
+class UserStatChangeMove(MoveEffect):
     def use(self, **kwargs):
-        raised_stat = self.field.loader.load_stat(self.stat_identifier)
-        self.user.raise_stat(raised_stat, self.delta, verbose=True)
+        stat = self.field.loader.load_stat(self.stat_identifier)
+        self.user.change_stat(stat, self.delta, verbose=True)
+
+class TargetSecondaryStatChangeMove(MoveEffect):
+    def do_secondary_effect(self, hit):
+        if not hit.target.fainted:
+            stat = self.field.loader.load_stat(self.stat_identifier)
+            hit.target.change_stat(stat, self.delta, verbose=True)
 
 class ConversionMove(MoveEffect):
     def convert(self, possible_types):
@@ -42,7 +48,7 @@ class Tackle(MoveEffect):
     pass
 
 @registry.put(11)
-class Sharpen(UserStatBoostMove):
+class Sharpen(UserStatChangeMove):
     stat_identifier = 'attack'
     delta = +1
 
@@ -75,9 +81,14 @@ class TriAttack(MoveEffect):
                     battler=hit.target)
 
 @registry.put(53)
-class Agility(UserStatBoostMove):
+class Agility(UserStatChangeMove):
     stat_identifier = 'speed'
     delta = +2
+
+@registry.put(71)
+class IcyWind(TargetSecondaryStatChangeMove):
+    stat_identifier = 'speed'
+    delta = -1
 
 @registry.put(77)
 class Confusion(MoveEffect):

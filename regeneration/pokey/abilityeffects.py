@@ -44,7 +44,7 @@ class Download(AbilityEffect):
                 raised_stat = self.field.loader.load_stat('attack')
             else:
                 raised_stat = self.field.loader.load_stat('special-attack')
-            battler.raise_stat(raised_stat, +1, verbose=True)
+            battler.change_stat(raised_stat, +1, verbose=True)
 
 @register
 class Limber(AilmentPreventingAbility):
@@ -78,6 +78,18 @@ class ShedSkin(AbilityEffect):
                 self.field.flip_coin(Fraction(3, 10), 'Shed skin check')):
             self.field.message.ShedSkin(battler=self.subject)
             ailment.remove()
+
+@register
+class Sturdy(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.sturdy)
+    def modify_move_damage(self, hit, damage):
+        target = hit.target
+        if (target is self.subject and target.hp >= target.stats.hp and
+                damage >= target.hp):
+            self.field.message.Sturdy(battler=target, ability=self.ability)
+            return target.hp - 1
+        else:
+            return damage
 
 @register
 class Swarm(AbilityEffect):

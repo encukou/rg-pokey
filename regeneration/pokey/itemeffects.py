@@ -42,6 +42,18 @@ class Brightpowder(ItemEffect):
             return accuracy
 
 @register
+class ChoiceSpecs(ItemEffect):
+    def modify_stat(self, battler, value, stat):
+        if battler is self.subject and stat.identifier == 'special-attack':
+            return value * 3 // 2
+        else:
+            return value
+
+    def move_used(self, move_effect):
+        if move_effect.user is self.subject:
+            self.subject.give_effect_self(effects.ChoiceLock(move_effect.move))
+
+@register
 class FlameOrb(ItemEffect):
     @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.orb)
     def end_turn(self, field):
