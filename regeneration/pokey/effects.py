@@ -122,12 +122,23 @@ class Freeze(MajorAilment):
     def prevent_use(self, move_effect):
         subject = self.subject
         if move_effect.user is subject:
-            if self.field.flip_coin(Fraction(1, 5), "Check for thawing out"):
-                self.remove()
-                self.field.message(self.messages.Heal, battler=subject)
+            if (move_effect.move.flags.defrost or
+                    self.field.flip_coin(Fraction(1, 5),
+                            "Check for thawing out")):
+                self.defrost()
             else:
                 self.field.message(self.messages.PreventUse, battler=subject)
                 return True
+
+    @Effect.orderkey(orderkeys.DamageReactionOrder.status)
+    def move_damage_done(self, hit):
+        if (hit.target is self.subject and
+                hit.type and hit.type.identifier == 'fire'):
+            self.defrost()
+
+    def defrost(self):
+        self.remove()
+        self.field.message(self.messages.Heal, battler=self.subject)
 
 @MajorAilment.register('psn')
 class Poison(MajorAilment):

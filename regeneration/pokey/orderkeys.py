@@ -69,4 +69,4 @@ class AnnounceOrder(object):
 
 class DamageReactionOrder(object):
     # XXX: Is it really true?
-    user_item, target_item = OrderKeys(2)
+    status, user_item, target_item = OrderKeys(3)
