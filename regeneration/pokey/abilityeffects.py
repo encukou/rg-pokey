@@ -62,6 +62,23 @@ class Download(AbilityEffect):
             battler.change_stat(raised_stat, +1, verbose=True)
 
 @register
+class Frisk(AbilityEffect):
+    @Effect.orderkey(orderkeys.AnnounceOrder.ability)
+    def send_out(self, battler):
+        if battler is self.subject:
+            opponents = [b for b in battler.opponents if b.item]
+            if opponents:
+                opponent = self.field.random_choice(opponents,
+                        "Choose frisked opponent")
+                self.field.message.Frisk(frisker=battler, battler=opponent,
+                        ability=self.ability, item=opponent.item)
+
+@register
+class Illuminate(AbilityEffect):
+    # Does nothing in battle
+    pass
+
+@register
 class Levitate(AbilityEffect, effects.Hovering):
     pass
 
@@ -178,3 +195,7 @@ class Trace(AbilityEffect):
                     pass
                 else:
                     send_out(battler)
+
+@register
+class WaterVeil(AilmentPreventingAbility):
+    effect_class = effects.Burn

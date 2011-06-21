@@ -159,3 +159,10 @@ class TakeAim(Message):
     message = "{battler} took aim at {target}!"
     battler = MessageArgument()
     target = MessageArgument()
+
+class Frisk(Message):
+    message = "{frisker} frisked {battler} and found one {item}!"
+    frisker = MessageArgument()
+    battler = MessageArgument()
+    ability = MessageArgument()
+    item = MessageArgument()

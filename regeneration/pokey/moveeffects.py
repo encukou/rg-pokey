@@ -72,6 +72,16 @@ class Sharpen(UserStatChangeMove):
     stat_identifier = 'attack'
     delta = +1
 
+@registry.put(12)
+class Sharpen(UserStatChangeMove):
+    stat_identifier = 'defense'
+    delta = +1
+
+@registry.put(17)
+class DoubleTeam(UserStatChangeMove):
+    stat_identifier = 'evasion'
+    delta = +1
+
 @registry.put(31)
 class Conversion(ConversionMove):
     def use(self):
@@ -137,6 +147,10 @@ class Conversion2(ConversionMove):
                         if e.damage_factor < 100)
             else:
                 self.fail()
+
+@registry.put(104)
+class QuickAttack(MoveEffect):
+    pass
 
 @registry.put(255)
 class Struggle(MoveEffect):

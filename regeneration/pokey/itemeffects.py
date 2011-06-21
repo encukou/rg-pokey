@@ -48,6 +48,15 @@ class ChoiceItem(ItemEffect):
         if move_effect.user is self.subject:
             self.subject.give_effect_self(effects.ChoiceLock(move_effect.move))
 
+class TypeBoostItem(ItemEffect):
+    @Effect.orderkey(DamageModifierOrder.item)
+    def modify_base_power(self, hit, power):
+        if (hit.user is self.subject and hit.type and
+                hit.type.identifier == self.type_identifier):
+            return power * 6 // 5
+        else:
+            return power
+
 @register
 class AirBalloon(ItemEffect, effects.Hovering):
     @Effect.orderkey(AnnounceOrder.item)
@@ -64,14 +73,12 @@ class AirBalloon(ItemEffect, effects.Hovering):
                     item=self.item)
 
 @register
-class BlackBelt(ItemEffect):
-    @Effect.orderkey(DamageModifierOrder.item)
-    def modify_base_power(self, hit, power):
-        if (hit.user is self.subject and hit.type and
-                hit.type.identifier == 'fighting'):
-            return power * 6 // 5
-        else:
-            return power
+class BlackBelt(TypeBoostItem):
+    type_identifier = 'fighting'
+
+@register
+class Blackglasses(TypeBoostItem):
+    type_identifier = 'dark'
 
 @register
 class Brightpowder(ItemEffect):
@@ -80,6 +87,10 @@ class Brightpowder(ItemEffect):
             return accuracy * Fraction(9, 10)
         else:
             return accuracy
+
+@register
+class Charcoal(TypeBoostItem):
+    type_identifier = 'fire'
 
 @register
 class ChoiceBand(ChoiceItem):
@@ -92,6 +103,10 @@ class ChoiceScarf(ChoiceItem):
 @register
 class ChoiceSpecs(ChoiceItem):
     stat_identifier = 'special-attack'
+
+@register
+class DragonFang(TypeBoostItem):
+    type_identifier = 'dragon'
 
 @register
 class FlameOrb(ItemEffect):
