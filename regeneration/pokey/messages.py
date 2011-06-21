@@ -117,6 +117,17 @@ class AnnouncePressure(Message):
     battler = MessageArgument()
     ability = MessageArgument()
 
+class AnnounceAirBalloon(Message):
+    message = "{battler} floats in the air with its {item}!"
+    battler = MessageArgument()
+    item = MessageArgument()
+
+class AirBalloonPopped(Message):
+    # XXX: Item consumption
+    message = "{battler}'s {item} popped!"
+    battler = MessageArgument()
+    item = MessageArgument()
+
 class ShedSkin(Message):
     message = "{battler} shed its skin!"
     battler = MessageArgument()
@@ -135,3 +146,11 @@ class Sturdy(Message):
     message = "{battler} held on thanks to {ability}!"
     battler = MessageArgument()
     ability = MessageArgument()
+
+class MagnetRise(Message):
+    message = "{battler} levitated on electromagnetism!"
+    battler = MessageArgument()
+
+class MagnetRiseEnd(Message):
+    message = "{battler}'s electromagnetism wore off!"
+    battler = MessageArgument()

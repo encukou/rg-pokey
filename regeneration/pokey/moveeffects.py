@@ -124,6 +124,15 @@ class Struggle(MoveEffect):
         self.user.do_damage(self.user.stats.hp // 4,
                 message_class=messages.Recoil)
 
+@registry.put(253)
+class MagnetRise(MoveEffect):
+    def use(self):
+        effect = self.user.give_effect_self(effects.MagnetRise())
+        if effect:
+            self.field.message.MagnetRise(battler=self.user)
+        else:
+            self.fail()
+
 @registry.put(260)
 class TrickRoom(MoveEffect):
     def use(self, **kwargs):

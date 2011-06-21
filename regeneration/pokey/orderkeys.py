@@ -61,3 +61,7 @@ class SwitchInDamage(object):
 class PreventOrder(object):
     (immobile, truant, disable, imprison, heal_block, confusion, flinch, taunt,
             gravity, attract, paralysis) = OrderKeys(11)
+
+class AnnounceOrder(object):
+    # XXX: Is it really true?
+    item, ability = OrderKeys(2)

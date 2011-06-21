@@ -34,6 +34,7 @@ class AilmentPreventingAbility(AbilityEffect):
 
 @register
 class Download(AbilityEffect):
+    @Effect.orderkey(orderkeys.AnnounceOrder.ability)
     def send_out(self, battler):
         if battler is self.subject:
             self.field.message.DownloadActivated(battler=battler,
@@ -47,6 +48,10 @@ class Download(AbilityEffect):
             battler.change_stat(raised_stat, +1, verbose=True)
 
 @register
+class Levitate(AbilityEffect, effects.Hovering):
+    pass
+
+@register
 class Limber(AilmentPreventingAbility):
     effect_class = effects.Paralysis
 
@@ -56,8 +61,9 @@ class OwnTempo(AilmentPreventingAbility):
 
 @register
 class Pressure(AbilityEffect):
+    @Effect.orderkey(orderkeys.AnnounceOrder.ability)
     def send_out(self, battler):
-        if battler == self.subject:
+        if battler is self.subject:
             self.field.message.AnnouncePressure(battler=battler,
                     ability=self.ability)
 
@@ -122,6 +128,7 @@ class Synchronize(AbilityEffect):
 
 @register
 class Trace(AbilityEffect):
+    @Effect.orderkey(orderkeys.AnnounceOrder.ability)
     def send_out(self, battler):
         # XXX: This ability cannot copy Multitype (or Trace)
         if battler is self.subject:

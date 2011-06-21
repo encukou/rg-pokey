@@ -206,3 +206,23 @@ class ChoiceLock(Effect):
         if (command.battler is self.subject and
                 command.move != self.locked_move):
             return True
+
+class Hovering(Effect):
+    def modify_effectivity(self, hit, effectivity):
+        if (hit.target is self.subject and hit.type and
+                hit.type.identifier == 'ground'):
+            return 0
+        else:
+            return effectivity
+
+class MagnetRise(Hovering):
+    def __init__(self):
+        self.turns_left = 5
+
+    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.magnet_rise)
+    def end_turn(self, field):
+        self.turns_left -= 1
+        if self.turns_left <= 0:
+            self.remove()
+            if not self.subject.get_effect(MagnetRise):
+                self.field.message.MagnetRiseEnd(battler=self.subject)

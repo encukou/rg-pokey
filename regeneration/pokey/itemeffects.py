@@ -9,7 +9,8 @@ from regeneration.battle.effect import Effect
 from regeneration.pokey import messages
 from regeneration.pokey import effects
 from regeneration.pokey.registry import EntityRegistry
-from regeneration.pokey.orderkeys import EndTurnOrder, DamageModifierOrder
+from regeneration.pokey.orderkeys import (EndTurnOrder, DamageModifierOrder,
+        AnnounceOrder)
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -17,7 +18,10 @@ __email__ = 'encukou@gmail.com'
 
 class ItemRegistry(EntityRegistry):
     def get_key(self, item):
-        if item and any(f.identifier == 'holdable' for f in item.flags):
+        # XXX: The Gen.V items apparently don't have flags set properly
+        if item: #  and any(f.identifier == 'holdable' for f in item.flags):
+            if item.identifier in ('nugget', 'pearl', 'big-pearl'):
+                return 'no-item'
             return super(ItemRegistry, self).get_key(item)
         else:
             return 'no-item'
@@ -32,6 +36,20 @@ def NoItem(item):
 class ItemEffect(Effect):
     def __init__(self, item):
         self.item = item
+
+@register
+class AirBalloon(ItemEffect, effects.Hovering):
+    @Effect.orderkey(AnnounceOrder.item)
+    def send_out(self, battler):
+        if battler is self.subject:
+            self.field.message.AnnounceAirBalloon(battler=battler,
+                    item=self.item)
+
+    def move_damage_done(self, hit):
+        if hit.target is self.subject:
+            self.subject.item = None
+            self.field.message.AirBalloonPopped(battler=self.subject,
+                    item=self.item)
 
 @register
 class Brightpowder(ItemEffect):
