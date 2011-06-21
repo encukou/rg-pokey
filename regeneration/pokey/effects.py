@@ -31,9 +31,9 @@ class MajorAilment(Effect):
     # Reference: http://www.smogon.com/dp/articles/status
 
     def block_application(self, effect):
-        if effect is self and self.subject.get_effect(MajorAilment) or any(
+        if effect is self and (self.subject.get_effect(MajorAilment) or any(
                 t.identifier in self.immune_type_identifiers for t in
-                self.subject.types):
+                self.subject.types)):
             return True
 
     def effect_applied(self, effect):
