@@ -37,6 +37,17 @@ class ItemEffect(Effect):
     def __init__(self, item):
         self.item = item
 
+class ChoiceItem(ItemEffect):
+    def modify_stat(self, battler, value, stat):
+        if battler is self.subject and stat.identifier == self.stat_identifier:
+            return value * 3 // 2
+        else:
+            return value
+
+    def move_used(self, move_effect):
+        if move_effect.user is self.subject:
+            self.subject.give_effect_self(effects.ChoiceLock(move_effect.move))
+
 @register
 class AirBalloon(ItemEffect, effects.Hovering):
     @Effect.orderkey(AnnounceOrder.item)
@@ -61,16 +72,16 @@ class Brightpowder(ItemEffect):
             return accuracy
 
 @register
-class ChoiceSpecs(ItemEffect):
-    def modify_stat(self, battler, value, stat):
-        if battler is self.subject and stat.identifier == 'special-attack':
-            return value * 3 // 2
-        else:
-            return value
+class ChoiceBand(ChoiceItem):
+    stat_identifier = 'attack'
 
-    def move_used(self, move_effect):
-        if move_effect.user is self.subject:
-            self.subject.give_effect_self(effects.ChoiceLock(move_effect.move))
+@register
+class ChoiceScarf(ChoiceItem):
+    stat_identifier = 'speed'
+
+@register
+class ChoiceSpecs(ChoiceItem):
+    stat_identifier = 'special-attack'
 
 @register
 class FlameOrb(ItemEffect):

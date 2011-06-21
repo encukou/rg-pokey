@@ -32,6 +32,20 @@ class AilmentPreventingAbility(AbilityEffect):
             if removed_effect:
                 removed_effect.remove()
 
+class TypeBoostAbility(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if (hit.type and hit.type.identifier == self.type_identifier and
+                hit.user is self.subject and
+                hit.user.hp * 3 <= hit.user.stats.hp):
+            return power * 3 // 2
+        else:
+            return power
+
+@register
+class Blaze(TypeBoostAbility):
+    type_identifier = 'fire'
+
 @register
 class Download(AbilityEffect):
     @Effect.orderkey(orderkeys.AnnounceOrder.ability)
@@ -54,6 +68,10 @@ class Levitate(AbilityEffect, effects.Hovering):
 @register
 class Limber(AilmentPreventingAbility):
     effect_class = effects.Paralysis
+
+@register
+class Overgrow(TypeBoostAbility):
+    type_identifier = 'grass'
 
 @register
 class OwnTempo(AilmentPreventingAbility):
@@ -106,15 +124,8 @@ class Sturdy(AbilityEffect):
             return damage
 
 @register
-class Swarm(AbilityEffect):
-    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
-    def modify_base_power(self, hit, power):
-        if (hit.type and hit.type.identifier == 'bug' and
-                hit.user is self.subject and
-                hit.user.hp * 3 <= hit.user.stats.hp):
-            return power * 3 // 2
-        else:
-            return power
+class Swarm(TypeBoostAbility):
+    type_identifier = 'bug'
 
 @register
 class Synchronize(AbilityEffect):

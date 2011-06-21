@@ -43,9 +43,25 @@ class ConversionMove(MoveEffect):
         else:
             self.fail()
 
+class SecondaryStatusMove(MoveEffect):
+    def do_secondary_effect(self, hit):
+        if not hit.target.fainted:
+            effect_class = self.effect_class
+            self.user.give_effect(hit.target, effect_class(),
+                    message_class=effect_class.messages.Applied,
+                    battler=hit.target)
+
 @registry.put(1)
 class Tackle(MoveEffect):
     pass
+
+@registry.put(6)
+class IceBeam(SecondaryStatusMove):
+    effect_class = effects.Freeze
+
+@registry.put(7)
+class Thunderbolt(SecondaryStatusMove):
+    effect_class = effects.Paralysis
 
 @registry.put(11)
 class Sharpen(UserStatChangeMove):
@@ -68,17 +84,14 @@ class Recover(MoveEffect):
             self.user.change_hp(amount, message_class=messages.Recover)
 
 @registry.put(37)
-class TriAttack(MoveEffect):
-    def do_secondary_effect(self, hit):
-        if not hit.target.fainted:
-            effect_class = self.field.random_choice([
-                    effects.Paralysis,
-                    effects.Burn,
-                    effects.Freeze,
-                ], "Choose the Tri Attack effect")
-            effect = self.user.give_effect(hit.target, effect_class(),
-                    message_class=effect_class.messages.Applied,
-                    battler=hit.target)
+class TriAttack(SecondaryStatusMove):
+    @property
+    def effect_class(self):
+        return self.field.random_choice([
+                effects.Paralysis,
+                effects.Burn,
+                effects.Freeze,
+            ], "Choose the Tri Attack effect")
 
 @registry.put(53)
 class Agility(UserStatChangeMove):
