@@ -27,7 +27,8 @@ class EndTurnOrder(object):
     # Reference: http://www.smogon.com/forums/showthread.php?t=79340
 
     (effect_end, wish, weather, weather_heal_ability, gravity, general,
-        future_sight, perish_song, trick_room) = checkpoints = OrderKeys(9)
+            future_sight, perish_song, trick_room, quiet,
+        ) = checkpoints = OrderKeys(10)
 
     # effect_end
     (reflect, light_screen, mist, safeguard, tailwind,
@@ -65,3 +66,7 @@ class PreventOrder(object):
 class AnnounceOrder(object):
     # XXX: Is it really true?
     item, ability = OrderKeys(2)
+
+class DamageReactionOrder(object):
+    # XXX: Is it really true?
+    user_item, target_item = OrderKeys(2)

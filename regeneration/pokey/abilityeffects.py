@@ -86,6 +86,14 @@ class ShedSkin(AbilityEffect):
             ailment.remove()
 
 @register
+class ShieldDust(AbilityEffect):
+    def modify_secondary_chance(self, hit, chance):
+        if hit.target is self.subject:
+            return 0
+        else:
+            return chance
+
+@register
 class Sturdy(AbilityEffect):
     @Effect.orderkey(orderkeys.DamageModifierOrder.sturdy)
     def modify_move_damage(self, hit, damage):

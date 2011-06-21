@@ -90,6 +90,14 @@ class IcyWind(TargetSecondaryStatChangeMove):
     stat_identifier = 'speed'
     delta = -1
 
+@registry.put(95)
+class LockOn(MoveEffect):
+    def hit(self, hit):
+        effect = self.user.give_effect(hit.target, effects.LockOn())
+        if effect:
+            self.field.message(messages.TakeAim, battler=self.user,
+                    target=hit.target)
+
 @registry.put(77)
 class Confusion(MoveEffect):
     def do_secondary_effect(self, hit):

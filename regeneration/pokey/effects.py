@@ -226,3 +226,17 @@ class MagnetRise(Hovering):
             self.remove()
             if not self.subject.get_effect(MagnetRise):
                 self.field.message.MagnetRiseEnd(battler=self.subject)
+
+class LockOn(Effect):
+    def __init__(self):
+        self.turns_left = 2
+
+    @EndTurnOrder.speed_key(EndTurnOrder.quiet)
+    def end_turn(self, field):
+        self.turns_left -= 1
+        if self.turns_left <= 0:
+            self.remove()
+
+    def ensure_hit(self, hit):
+        if hit.target is self.subject and hit.user is self.inducer:
+            return True

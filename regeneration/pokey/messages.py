@@ -154,3 +154,8 @@ class MagnetRise(Message):
 class MagnetRiseEnd(Message):
     message = "{battler}'s electromagnetism wore off!"
     battler = MessageArgument()
+
+class TakeAim(Message):
+    message = "{battler} took aim at {target}!"
+    battler = MessageArgument()
+    target = MessageArgument()

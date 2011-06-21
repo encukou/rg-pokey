@@ -10,7 +10,7 @@ from regeneration.pokey import messages
 from regeneration.pokey import effects
 from regeneration.pokey.registry import EntityRegistry
 from regeneration.pokey.orderkeys import (EndTurnOrder, DamageModifierOrder,
-        AnnounceOrder)
+        AnnounceOrder, DamageReactionOrder)
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -45,6 +45,7 @@ class AirBalloon(ItemEffect, effects.Hovering):
             self.field.message.AnnounceAirBalloon(battler=battler,
                     item=self.item)
 
+    @Effect.orderkey(DamageReactionOrder.target_item)
     def move_damage_done(self, hit):
         if hit.target is self.subject:
             self.subject.item = None
@@ -87,6 +88,17 @@ class RazorClaw(ItemEffect):
             return stage + 1
         else:
             return stage
+
+@register
+class ShellBell(ItemEffect):
+    @Effect.orderkey(DamageReactionOrder.user_item)
+    def move_damage_done(self, hit):
+        subject = self.subject
+        if (hit.user is subject and hit.target is not subject and
+                subject.hp < subject.stats.hp):
+            heal_amount = (hit.damage // 8) or 1
+            subject.change_hp(heal_amount, message_class=messages.ItemHeal,
+                    item=self.item)
 
 @register
 class LaxIncense(ItemEffect):
