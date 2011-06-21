@@ -64,6 +64,16 @@ class AirBalloon(ItemEffect, effects.Hovering):
                     item=self.item)
 
 @register
+class BlackBelt(ItemEffect):
+    @Effect.orderkey(DamageModifierOrder.item)
+    def modify_base_power(self, hit, power):
+        if (hit.user is self.subject and hit.type and
+                hit.type.identifier == 'fighting'):
+            return power * 6 // 5
+        else:
+            return power
+
+@register
 class Brightpowder(ItemEffect):
     def modify_accuracy(self, hit, accuracy):
         if hit.target is self.subject:

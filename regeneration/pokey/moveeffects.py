@@ -55,6 +55,10 @@ class SecondaryStatusMove(MoveEffect):
 class Tackle(MoveEffect):
     pass
 
+@registry.put(5)
+class Flamethrower(SecondaryStatusMove):
+    effect_class = effects.Burn
+
 @registry.put(6)
 class IceBeam(SecondaryStatusMove):
     effect_class = effects.Freeze

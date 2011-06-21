@@ -144,6 +144,18 @@ class Synchronize(AbilityEffect):
                 self.field.message(effect.messages.Applied,
                         battler=effect.subject)
 
+@register
+class Technician(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if hit.user is self.subject and power <= 60:
+            return power * 3 // 2
+        else:
+            return power
+
+@register
+class Torrent(TypeBoostAbility):
+    type_identifier = 'water'
 
 @register
 class Trace(AbilityEffect):
@@ -166,12 +178,3 @@ class Trace(AbilityEffect):
                     pass
                 else:
                     send_out(battler)
-
-@register
-class Technician(AbilityEffect):
-    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
-    def modify_base_power(self, hit, power):
-        if hit.user is self.subject and power <= 60:
-            return power * 3 // 2
-        else:
-            return power
