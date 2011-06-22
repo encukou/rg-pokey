@@ -92,6 +92,11 @@ class Growl(TargetStatChangeMove):
     stat_identifier = 'attack'
     delta = -1
 
+@registry.put(20)
+class TailWhip(TargetStatChangeMove):
+    stat_identifier = 'defense'
+    delta = -1
+
 @registry.put(31)
 class Conversion(ConversionMove):
     def use(self):

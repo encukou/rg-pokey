@@ -185,6 +185,16 @@ class Technician(AbilityEffect):
             return power
 
 @register
+class ThickFat(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.target_ability)
+    def modify_base_power(self, hit, power):
+        if (hit.target is self.subject and hit.type and
+                hit.type.identifier in ('ice', 'fire')):
+            return power // 2
+        else:
+            return power
+
+@register
 class Torrent(TypeBoostAbility):
     type_identifier = 'water'
 

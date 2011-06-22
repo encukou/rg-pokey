@@ -122,6 +122,10 @@ class HardStone(TypeBoostItem):
     type_identifier = 'rock'
 
 @register
+class Magnet(TypeBoostItem):
+    type_identifier = 'electric'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:
