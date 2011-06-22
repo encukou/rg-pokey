@@ -45,7 +45,8 @@ class ChoiceItem(ItemEffect):
             return value
 
     def move_used(self, move_effect):
-        if move_effect.user is self.subject:
+        if (move_effect.user is self.subject and
+                not self.subject.get_effect(effects.ChoiceLock)):
             self.subject.give_effect_self(effects.ChoiceLock(move_effect.move))
 
 class TypeBoostItem(ItemEffect):
