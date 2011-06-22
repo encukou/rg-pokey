@@ -130,6 +130,14 @@ class MetalCoat(TypeBoostItem):
     type_identifier = 'steel'
 
 @register
+class MiracleSeed(TypeBoostItem):
+    type_identifier = 'grass'
+
+@register
+class MysticWater(TypeBoostItem):
+    type_identifier = 'water'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:

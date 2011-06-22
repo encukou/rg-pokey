@@ -121,6 +121,16 @@ class Electroweb(TargetSecondaryStatChangeMove):
         super(Electroweb, self).__init__(*args, **kwargs)
         self.effect_chance = 100
 
+@registry.put(24)
+class Flash(TargetStatChangeMove):
+    stat_identifier = 'accuracy'
+    delta = -1
+
+@registry.put(25)
+class SweetScent(TargetStatChangeMove):
+    stat_identifier = 'evasion'
+    delta = -1
+
 @registry.put(31)
 class Conversion(ConversionMove):
     def use(self):

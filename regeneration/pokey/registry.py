@@ -52,3 +52,4 @@ class EntityRegistry(Registry):
 
     def register(self, cls):
         self[cls.__name__] = cls
+        return cls

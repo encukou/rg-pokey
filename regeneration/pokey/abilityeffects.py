@@ -43,6 +43,13 @@ class TypeBoostAbility(AbilityEffect):
             return power
 
 @register
+class BattleArmor(AbilityEffect):
+    def prevent_critical_hit(self, hit):
+        print hit.target, self.subject
+        if hit.target is self.subject:
+            return True
+
+@register
 class Blaze(TypeBoostAbility):
     type_identifier = 'fire'
 
@@ -143,6 +150,8 @@ class ShedSkin(AbilityEffect):
                 self.field.flip_coin(Fraction(3, 10), 'Shed skin check')):
             self.field.message.ShedSkin(battler=self.subject)
             ailment.remove()
+
+ability_effect_registry['ShellArmor'] = BattleArmor
 
 @register
 class ShieldDust(AbilityEffect):
