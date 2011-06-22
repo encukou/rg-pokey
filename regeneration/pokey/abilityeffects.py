@@ -109,6 +109,20 @@ class Pressure(AbilityEffect):
             return pp_reduction
 
 @register
+class Rivalry(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        if (hit.user is self.subject and
+                    hit.user.gender.identifier != 'none' and
+                    hit.target.gender.identifier != 'none'):
+            if hit.target.gender.is_opposite(hit.user.gender):
+                return power * 3 // 4
+            else:
+                return power * 5 // 4
+        else:
+            return power
+
+@register
 class ShedSkin(AbilityEffect):
     @orderkeys.EndTurnOrder.speed_key(
             orderkeys.EndTurnOrder.general,

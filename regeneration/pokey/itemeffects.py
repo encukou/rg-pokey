@@ -118,6 +118,10 @@ class FlameOrb(ItemEffect):
                     battler=effect.subject, item=self.item)
 
 @register
+class HardStone(TypeBoostItem):
+    type_identifier = 'rock'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:

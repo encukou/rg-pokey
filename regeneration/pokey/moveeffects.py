@@ -24,6 +24,11 @@ class UserStatChangeMove(MoveEffect):
         stat = self.field.loader.load_stat(self.stat_identifier)
         self.user.change_stat(stat, self.delta, verbose=True)
 
+class TargetStatChangeMove(MoveEffect):
+    def hit(self, hit):
+        stat = self.field.loader.load_stat(self.stat_identifier)
+        hit.target.change_stat(stat, self.delta, verbose=True)
+
 class TargetSecondaryStatChangeMove(MoveEffect):
     def do_secondary_effect(self, hit):
         if not hit.target.fainted:
@@ -81,6 +86,11 @@ class Sharpen(UserStatChangeMove):
 class DoubleTeam(UserStatChangeMove):
     stat_identifier = 'evasion'
     delta = +1
+
+@registry.put(19)
+class Growl(TargetStatChangeMove):
+    stat_identifier = 'attack'
+    delta = -1
 
 @registry.put(31)
 class Conversion(ConversionMove):
