@@ -174,10 +174,10 @@ class Leftovers(ItemEffect):
 
 @register
 class WiseGlasses(ItemEffect):
-    @Effect.orderkey(DamageModifierOrder.user_ability)
+    @Effect.orderkey(DamageModifierOrder.item)
     def modify_base_power(self, hit, power):
         if (hit.user is self.subject and
-                hit.damage_class.identifier == 'physical'):
+                hit.damage_class.identifier == 'special'):
             return power * 11 // 10
         else:
             return power
