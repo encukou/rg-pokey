@@ -126,6 +126,10 @@ class Magnet(TypeBoostItem):
     type_identifier = 'electric'
 
 @register
+class MetalCoat(TypeBoostItem):
+    type_identifier = 'steel'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:

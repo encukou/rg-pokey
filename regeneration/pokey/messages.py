@@ -166,3 +166,8 @@ class Frisk(Message):
     battler = MessageArgument()
     ability = MessageArgument()
     item = MessageArgument()
+
+class NaturalCure(Message):
+    message = "{battler}'s {ability} cured its status!"
+    battler = MessageArgument()
+    ability = MessageArgument()

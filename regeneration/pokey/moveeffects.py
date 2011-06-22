@@ -97,6 +97,30 @@ class TailWhip(TargetStatChangeMove):
     stat_identifier = 'defense'
     delta = -1
 
+@registry.put(21)
+def effect21(move, user, target):
+    """Move effect #21 factory
+
+    StringShot and Electroweb/Low Sweep share the same effect code, but
+    otherwise are entirely different.
+    """
+    if move.power:
+        return Electroweb(move, user, target)
+    else:
+        return StringShot(move, user, target)
+
+class StringShot(TargetStatChangeMove):
+    stat_identifier = 'speed'
+    delta = -1
+
+class Electroweb(TargetSecondaryStatChangeMove):
+    stat_identifier = 'speed'
+    delta = -1
+
+    def __init__(self, *args, **kwargs):
+        super(Electroweb, self).__init__(*args, **kwargs)
+        self.effect_chance = 100
+
 @registry.put(31)
 class Conversion(ConversionMove):
     def use(self):

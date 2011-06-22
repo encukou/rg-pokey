@@ -87,6 +87,16 @@ class Limber(AilmentPreventingAbility):
     effect_class = effects.Paralysis
 
 @register
+class NaturalCure(AbilityEffect):
+    def withdraw(self, battler):
+        if battler is self.subject:
+            effect = battler.get_effect(effects.MajorAilment)
+            if effect:
+                effect.remove()
+                self.field.message.NaturalCure(battler=battler,
+                        ability=self.ability)
+
+@register
 class Overgrow(TypeBoostAbility):
     type_identifier = 'grass'
 
