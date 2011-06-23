@@ -182,6 +182,16 @@ class Screech(TargetStatChangeMove):
     stat_identifier = 'defense'
     delta = -2
 
+@registry.put(61)
+class ScaryFace(TargetStatChangeMove):
+    stat_identifier = 'speed'
+    delta = -2
+
+@registry.put(63)
+class MetalSound(TargetStatChangeMove):
+    stat_identifier = 'special-defense'
+    delta = -2
+
 @registry.put(71)
 class IcyWind(TargetSecondaryStatChangeMove):
     stat_identifier = 'speed'

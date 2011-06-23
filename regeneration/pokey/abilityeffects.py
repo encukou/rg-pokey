@@ -118,6 +118,18 @@ class Illuminate(AbilityEffect):
     pass
 
 @register
+class IronFist(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
+    def modify_base_power(self, hit, power):
+        print hit.user, self.subject, hit.move_effect
+        print hit.user, self.subject, hit.move_effect.move
+        if (hit.user is self.subject and hit.move_effect.move and
+                hit.move_effect.move.flags.punch):
+            return power * 6 // 5
+        else:
+            return power
+
+@register
 class Levitate(AbilityEffect, effects.Hovering):
     pass
 
@@ -200,6 +212,14 @@ class ShieldDust(AbilityEffect):
             return 0
         else:
             return chance
+
+@register
+class Soundproof(AbilityEffect):
+    def prevent_hit(self, hit):
+        if hit.target is self.subject and hit.move_effect.move.flags.sound:
+            self.field.message.AbilityBlocksHit(battler=hit.target,
+                    ability=self.ability, hit=hit)
+            return True
 
 @register
 class Sturdy(AbilityEffect):

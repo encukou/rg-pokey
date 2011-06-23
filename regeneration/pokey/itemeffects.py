@@ -159,6 +159,14 @@ class RazorClaw(ItemEffect):
             return stage
 
 @register
+class RockIncense(TypeBoostItem):
+    type_identifier = 'rock'
+
+@register
+class RoseIncense(TypeBoostItem):
+    type_identifier = 'grass'
+
+@register
 class ShellBell(ItemEffect):
     @Effect.orderkey(DamageReactionOrder.user_item)
     def move_damage_done(self, hit):

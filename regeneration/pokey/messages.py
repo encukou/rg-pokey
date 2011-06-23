@@ -203,3 +203,9 @@ class ColorChange(Message):
     battler = MessageArgument()
     ability = MessageArgument()
     type = MessageArgument()
+
+class AbilityBlocksHit(Message):
+    message = "{battler}'s {ability} blocks the hit!"
+    battler = MessageArgument()
+    ability = MessageArgument()
+    hit = MessageArgument()
