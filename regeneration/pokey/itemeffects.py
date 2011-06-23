@@ -68,7 +68,7 @@ class AirBalloon(ItemEffect, effects.Hovering):
 
     @Effect.orderkey(DamageReactionOrder.target_item)
     def move_damage_done(self, hit):
-        if hit.target is self.subject:
+        if hit.target is self.subject and hit.user is not self.subject:
             self.subject.item = None
             self.field.message.AirBalloonPopped(battler=self.subject,
                     item=self.item)
