@@ -24,7 +24,24 @@ class DaemonEffect(Effect):
         if field.check_win():
             return True
 
-class MajorAilment(Effect):
+class Ailment(Effect):
+    def __init__(self, verbose=True):
+        """Initializer
+
+        Set verbose to false if the effect should be blocked quietly.
+        If left true, a blocking effect will complain with a message like "But
+        XYZ is burned already!" or "ABC prevents XYZ from being frozen!".
+        """
+        self.verbose = verbose
+        super(Ailment, self).__init__()
+
+    def message_values(self, trainer):
+        return {
+                'name': self.messages.Name.message,
+                'class': self.messages.Name.registry_name,
+            }
+
+class MajorAilment(Ailment):
     class_by_code = {}
     immune_type_identifiers = ()
 
@@ -48,7 +65,7 @@ class MajorAilment(Effect):
     def effect_for_code(cls, code):
         if code == 'ok':
             return None
-        return cls.class_by_code[code]()
+        return cls.class_by_code[code](verbose=False)
 
     @classmethod
     def register(cls, code):
@@ -145,9 +162,14 @@ class Poison(MajorAilment):
     # XXX: Dummy for now
     pass
 
-class Confusion(Effect):
+class Confusion(Ailment):
+    messages = messages.Confusion
+
     def block_application(self, effect):
         if effect is self and self.subject.get_effect(Confusion):
+            if effect.verbose:
+                self.field.message(messages.Confusion.AlreadyPresent,
+                        battler=self.subject)
             return True
 
     def effect_applied(self, effect):

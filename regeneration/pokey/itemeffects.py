@@ -113,7 +113,7 @@ class DragonFang(TypeBoostItem):
 class FlameOrb(ItemEffect):
     @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.orb)
     def end_turn(self, field):
-        effect = self.subject.give_effect_self(effects.Burn())
+        effect = self.subject.give_effect_self(effects.Burn(verbose=False))
         if effect:
             self.field.message(messages.Burn.ItemApplied,
                     battler=effect.subject, item=self.item)
@@ -137,6 +137,10 @@ class MiracleSeed(TypeBoostItem):
 @register
 class MysticWater(TypeBoostItem):
     type_identifier = 'water'
+
+@register
+class Nevermeltice(TypeBoostItem):
+    type_identifier = 'ice'
 
 @register
 class RazorClaw(ItemEffect):

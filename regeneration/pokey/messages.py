@@ -30,6 +30,10 @@ class DownloadActivated(Message):
     ability = MessageArgument()
 
 class Paralysis(object):
+    class Name(Message):
+        registry_name = 'Paralysis.Name'
+        message = "Paralysis"
+
     class Applied(Message):
         registry_name = 'Paralysis.Applied'
         message = "{battler} was paralyzed! It may be unable to attack!"
@@ -41,6 +45,10 @@ class Paralysis(object):
         battler = MessageArgument()
 
 class Burn(object):
+    class Name(Message):
+        registry_name = 'Burn.Name'
+        message = "Burn"
+
     class Applied(Message):
         registry_name = 'Burn.Applied'
         message = "{battler} was burned!"
@@ -56,6 +64,10 @@ class Burn(object):
         message = "{battler} was hurt by its burn!"
 
 class Freeze(object):
+    class Name(Message):
+        registry_name = 'Freeze.Name'
+        message = "Freeze"
+
     class Applied(Message):
         registry_name = 'Freeze.Applied'
         message = "{battler} was frozen solid!"
@@ -72,6 +84,10 @@ class Freeze(object):
         battler = MessageArgument()
 
 class Confusion(object):
+    class Name(Message):
+        registry_name = 'Confusion.Name'
+        message = "Confusion"
+
     class Applied(Message):
         registry_name = 'Confusion.Applied'
         message = "{battler} was confused!"
@@ -90,6 +106,10 @@ class Confusion(object):
     class Heal(Message):
         registry_name = 'Confusion.Heal'
         message = "{battler} snapped out of confusion!"
+        battler = MessageArgument()
+
+    class AlreadyPresent(Message):
+        message = "{battler} is already confused!"
         battler = MessageArgument()
 
 class TwistedDimensions(Message):
@@ -171,3 +191,9 @@ class NaturalCure(Message):
     message = "{battler}'s {ability} cured its status!"
     battler = MessageArgument()
     ability = MessageArgument()
+
+class AbilityPreventAilment(Message):
+    message = "{battler}'s {ability} prevented the {ailment}!"
+    battler = MessageArgument()
+    ability = MessageArgument()
+    ailment = MessageArgument()

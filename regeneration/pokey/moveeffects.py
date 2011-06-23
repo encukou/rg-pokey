@@ -48,11 +48,18 @@ class ConversionMove(MoveEffect):
         else:
             self.fail()
 
+class StatusMove(MoveEffect):
+    def hit(self, hit):
+        effect_class = self.effect_class
+        self.user.give_effect(hit.target, effect_class(),
+                message_class=effect_class.messages.Applied,
+                battler=hit.target)
+
 class SecondaryStatusMove(MoveEffect):
     def do_secondary_effect(self, hit):
         if not hit.target.fainted:
             effect_class = self.effect_class
-            self.user.give_effect(hit.target, effect_class(),
+            self.user.give_effect(hit.target, effect_class(verbose=False),
                     message_class=effect_class.messages.Applied,
                     battler=hit.target)
 
@@ -156,6 +163,10 @@ class TriAttack(SecondaryStatusMove):
                 effects.Freeze,
             ], "Choose the Tri Attack effect")
 
+@registry.put(50)
+class ConfuseRay(StatusMove):
+    effect_class = effects.Confusion
+
 @registry.put(53)
 class Agility(UserStatChangeMove):
     stat_identifier = 'speed'
@@ -175,13 +186,8 @@ class LockOn(MoveEffect):
                     target=hit.target)
 
 @registry.put(77)
-class Confusion(MoveEffect):
-    def do_secondary_effect(self, hit):
-        if not hit.target.fainted:
-            effect = self.user.give_effect(hit.target, effects.Confusion())
-            if effect:
-                self.field.message(messages.Confusion.Applied,
-                        battler=effect.subject)
+class Confusion(SecondaryStatusMove):
+    effect_class = effects.Confusion
 
 @registry.put(94)
 class Conversion2(ConversionMove):

@@ -8,6 +8,7 @@ from regeneration.battle.effect import Effect
 from regeneration.pokey.registry import EntityRegistry
 from regeneration.pokey import effects
 from regeneration.pokey import orderkeys
+from regeneration.pokey import messages
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -24,6 +25,10 @@ class AilmentPreventingAbility(AbilityEffect):
     def block_application(self, effect):
         if effect.subject is self.subject and isinstance(effect,
                 self.effect_class):
+            if effect.verbose:
+                self.field.message(messages.AbilityPreventAilment,
+                        ability=self.ability, ailment=effect,
+                        battler=self.subject)
             return True
 
     def effect_applied(self, applied_effect):
@@ -79,6 +84,23 @@ class Frisk(AbilityEffect):
                         "Choose frisked opponent")
                 self.field.message.Frisk(frisker=battler, battler=opponent,
                         ability=self.ability, item=opponent.item)
+
+@register
+class Guts(AbilityEffect):
+    def modify_stat(self, battler, value, stat):
+        if (battler is self.subject and stat.identifier == 'attack' and
+                battler.get_effect(effects.MajorAilment)):
+            return value * 3 // 2
+        else:
+            return value
+
+    def disable_callback(self, effect, callback_name, arguments):
+        """Return true to disable another effect's callback.
+        """
+        if (isinstance(effect, effects.Burn) and
+                callback_name == 'modify_move_damage' and
+                effect.subject is self.subject):
+            return True
 
 @register
 class Illuminate(AbilityEffect):
@@ -183,7 +205,8 @@ class Synchronize(AbilityEffect):
         classes = effects.Burn, effects.Paralysis, effects.Poison
         if effect.subject is self.subject and isinstance(effect, classes):
             effect_class = type(effect)
-            effect = self.subject.give_effect(effect.inducer, effect_class())
+            effect = self.subject.give_effect(effect.inducer,
+                    effect_class(verbose=False))
             if effect:
                 self.field.message.Synchronize(
                         synchronizer=self.subject,
