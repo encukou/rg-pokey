@@ -124,7 +124,7 @@ class Burn(MajorAilment):
 
     @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.status_damage)
     def end_turn(self, field):
-        self.subject.do_damage(self.subject.stats.hp // 8,
+        self.subject.do_damage(self.subject.stats.hp // 8 or 1,
                 message_class=self.messages.Hurt)
 
 @MajorAilment.register('frz')
