@@ -162,6 +162,14 @@ class Rivalry(AbilityEffect):
             return power
 
 @register
+class SereneGrace(AbilityEffect):
+    def modify_secondary_chance(self, hit, chance):
+        if hit.user is self.subject:
+            return chance * 2
+        else:
+            return chance
+
+@register
 class ShedSkin(AbilityEffect):
     @orderkeys.EndTurnOrder.speed_key(
             orderkeys.EndTurnOrder.general,

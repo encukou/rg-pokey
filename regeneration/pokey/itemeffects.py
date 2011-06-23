@@ -143,6 +143,10 @@ class Nevermeltice(TypeBoostItem):
     type_identifier = 'ice'
 
 @register
+class OddIncense(TypeBoostItem):
+    type_identifier = 'psychic'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:

@@ -172,6 +172,11 @@ class Agility(UserStatChangeMove):
     stat_identifier = 'speed'
     delta = +2
 
+@registry.put(59)
+class Charm(TargetStatChangeMove):
+    stat_identifier = 'attack'
+    delta = -2
+
 @registry.put(71)
 class IcyWind(TargetSecondaryStatChangeMove):
     stat_identifier = 'speed'
