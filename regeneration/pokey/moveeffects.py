@@ -238,9 +238,13 @@ class Struggle(MoveEffect):
         super(Struggle, self).__init__(*args, **kwargs)
         self.type = None
 
+    def do_use(self, **kwargs):
+        with self.user.give_effect(self.field, effects.UnblockableMove()):
+            return super(Struggle, self).do_use(**kwargs)
+
     def hit(self, hit):
         super(Struggle, self).hit(hit)
-        self.user.do_damage(self.user.stats.hp // 4,
+        self.user.do_damage(self.user.stats.hp // 4 or 1,
                 message_class=messages.Recoil)
 
 @registry.put(253)

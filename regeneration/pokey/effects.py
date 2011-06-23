@@ -216,6 +216,11 @@ class Confusion(Ailment):
                     'target': self.target.message_values(trainer),
                 }
 
+class UnblockableMove(Effect):
+    def disable_callback(self, effect, callback_name, arguments):
+        if callback_name in ('prevent_use', 'prevent_hit'):
+            return True
+
 class TwistedDimensions(Effect):
     def effect_applied(self, effect):
         if effect is self:
