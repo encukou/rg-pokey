@@ -192,6 +192,11 @@ class MetalSound(TargetStatChangeMove):
     stat_identifier = 'special-defense'
     delta = -2
 
+@registry.put(70)
+class RockSmash(TargetSecondaryStatChangeMove):
+    stat_identifier = 'defense'
+    delta = -1
+
 @registry.put(71)
 class IcyWind(TargetSecondaryStatChangeMove):
     stat_identifier = 'speed'

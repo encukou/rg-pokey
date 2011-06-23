@@ -303,3 +303,11 @@ class Trace(AbilityEffect):
 @register
 class WaterVeil(AilmentPreventingAbility):
     effect_class = effects.Burn
+
+@register
+class WonderGuard(AbilityEffect):
+    def prevent_hit(self, hit):
+        if hit.target is self.subject and hit.power and hit.effectivity <= 1:
+            self.field.message.AbilityBlocksHit(battler=hit.target,
+                    ability=self.ability, hit=hit)
+            return True
