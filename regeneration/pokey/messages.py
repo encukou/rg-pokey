@@ -197,3 +197,9 @@ class AbilityPreventAilment(Message):
     battler = MessageArgument()
     ability = MessageArgument()
     ailment = MessageArgument()
+
+class ColorChange(Message):
+    message = "{battler}'s {ability} changes its type to {type}!"
+    battler = MessageArgument()
+    ability = MessageArgument()
+    type = MessageArgument()

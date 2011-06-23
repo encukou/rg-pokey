@@ -147,6 +147,10 @@ class OddIncense(TypeBoostItem):
     type_identifier = 'psychic'
 
 @register
+class PoisonBarb(TypeBoostItem):
+    type_identifier = 'poison'
+
+@register
 class RazorClaw(ItemEffect):
     def critical_hit_stage(self, hit, stage):
         if hit.user is self.subject:
