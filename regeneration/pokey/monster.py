@@ -39,19 +39,22 @@ class Monster(BaseMonster):
                     if pstat.stat.name == stat.name
                 )
             base = pstat.base_stat
-            gene = self.genes[stat]
-            effort = self.effort[stat]
-            level = self.level
-            result = ((2 * base + gene + (effort // 4)) * level // 100 + 5)
-            if stat.identifier == 'hp':
-                result += level + 5
+            if base == 1:
+                result = 1
             else:
-                nature_modifier = 1
-                if self.nature.increased_stat is pstat.stat:
-                    nature_modifier += Fraction(1, 10)
-                if self.nature.decreased_stat is pstat.stat:
-                    nature_modifier -= Fraction(1, 10)
-                result = int(result * nature_modifier)
+                gene = self.genes[stat]
+                effort = self.effort[stat]
+                level = self.level
+                result = ((2 * base + gene + (effort // 4)) * level // 100 + 5)
+                if stat.identifier == 'hp':
+                    result += level + 5
+                else:
+                    nature_modifier = 1
+                    if self.nature.increased_stat is pstat.stat:
+                        nature_modifier += Fraction(1, 10)
+                    if self.nature.decreased_stat is pstat.stat:
+                        nature_modifier -= Fraction(1, 10)
+                    result = int(result * nature_modifier)
             self.stats[stat] = result
         self.hp = self.stats.hp - missing_hp
         if self.hp < 0:
