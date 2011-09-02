@@ -17,7 +17,7 @@ __email__ = 'encukou@gmail.com'
 class DaemonEffect(Effect):
     def _checkpoints(effect):
         for c in EndTurnOrder.checkpoints:
-            yield c, 1e10, 0
+            yield c, EndTurnOrder.end_tier_effect, 0, 0
 
     @Effect.orderkey(_checkpoints)
     def end_turn(self, field):
@@ -122,7 +122,7 @@ class Burn(MajorAilment):
         else:
             return damage
 
-    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.status_damage)
+    @EndTurnOrder.speed_key(EndTurnOrder.status_damage)
     def end_turn(self, field):
         self.subject.do_damage(self.subject.stats.hp // 8 or 1,
                 message_class=self.messages.Hurt)
@@ -229,7 +229,7 @@ class TwistedDimensions(Effect):
     def speed_factor(self, field, speed_factor):
         return -1
 
-    @EndTurnOrder.speed_key(EndTurnOrder.trick_room)
+    @EndTurnOrder.speed_key(EndTurnOrder.trick_room_end)
     def end_turn(self, field):
         self.counter -= 1
         if self.counter <= 0:
@@ -257,7 +257,7 @@ class MagnetRise(Hovering):
     def __init__(self):
         self.turns_left = 5
 
-    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.magnet_rise)
+    @EndTurnOrder.speed_key(EndTurnOrder.magnet_rise_end)
     def end_turn(self, field):
         self.turns_left -= 1
         if self.turns_left <= 0:

@@ -111,7 +111,7 @@ class DragonFang(TypeBoostItem):
 
 @register
 class FlameOrb(ItemEffect):
-    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.orb)
+    @EndTurnOrder.speed_key(EndTurnOrder.item_activation)
     def end_turn(self, field):
         effect = self.subject.give_effect_self(effects.Burn(verbose=False))
         if effect:
@@ -195,7 +195,7 @@ class LaxIncense(ItemEffect):
 
 @register
 class Leftovers(ItemEffect):
-    @EndTurnOrder.speed_key(EndTurnOrder.general, EndTurnOrder.heal_item)
+    @EndTurnOrder.speed_key(EndTurnOrder.item_heal)
     def end_turn(self, field):
         if self.subject.hp < self.subject.stats.hp:
             self.subject.change_hp(self.subject.stats.hp // 16,

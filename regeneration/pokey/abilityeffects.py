@@ -193,9 +193,7 @@ class SereneGrace(AbilityEffect):
 
 @register
 class ShedSkin(AbilityEffect):
-    @orderkeys.EndTurnOrder.speed_key(
-            orderkeys.EndTurnOrder.general,
-            orderkeys.EndTurnOrder.speed_boost_shed_skin)
+    @orderkeys.EndTurnOrder.speed_key(orderkeys.EndTurnOrder.ability_heal)
     def end_turn(self, field):
         ailment = self.subject.get_effect(effects.MajorAilment)
         if (ailment and
