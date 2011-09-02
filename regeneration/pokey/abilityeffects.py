@@ -216,10 +216,25 @@ class ShieldDust(AbilityEffect):
 @register
 class Soundproof(AbilityEffect):
     def prevent_hit(self, hit):
-        if hit.target is self.subject and hit.move_effect.move.flags.sound:
+        if (hit.target is self.subject and hit.move_effect.move and
+                hit.move_effect.move.flags.sound):
             self.field.message.AbilityBlocksHit(battler=hit.target,
                     ability=self.ability, hit=hit)
             return True
+
+@register
+class Static(AbilityEffect):
+    @Effect.orderkey(orderkeys.DamageReactionOrder.target_ability)
+    def move_damage_done(self, hit):
+        if (hit.target is self.subject and hit.move_effect.move and
+                hit.move_effect.move.flags.contact and
+                self.field.flip_coin(Fraction(1, 10), 'Static activation')):
+            effect = self.subject.give_effect(hit.user, effects.Paralysis())
+            if effect:
+                self.field.message.ContactAilmentAbility(battler=hit.target,
+                        ability=self.ability, subject=hit.user)
+                self.field.message(effect.messages.Applied,
+                        battler=hit.user)
 
 @register
 class Sturdy(AbilityEffect):

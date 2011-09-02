@@ -202,6 +202,11 @@ class IcyWind(TargetSecondaryStatChangeMove):
     stat_identifier = 'speed'
     delta = -1
 
+@registry.put(72)
+class MistBall(TargetSecondaryStatChangeMove):
+    stat_identifier = 'special-attack'
+    delta = -1
+
 @registry.put(95)
 class LockOn(MoveEffect):
     def hit(self, hit):

@@ -171,6 +171,10 @@ class SeaIncense(TypeBoostItem):
     type_identifier = 'water'
 
 @register
+class SharpBeak(TypeBoostItem):
+    type_identifier = 'flying'
+
+@register
 class ShellBell(ItemEffect):
     @Effect.orderkey(DamageReactionOrder.user_item)
     def move_damage_done(self, hit):

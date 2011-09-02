@@ -209,3 +209,9 @@ class AbilityBlocksHit(Message):
     battler = MessageArgument()
     ability = MessageArgument()
     hit = MessageArgument()
+
+class ContactAilmentAbility(Message):
+    message = "{battler}'s {ability} activates!"
+    battler = MessageArgument()
+    ability = MessageArgument()
+    subject = MessageArgument()
