@@ -17,7 +17,7 @@ __email__ = 'encukou@gmail.com'
 class DaemonEffect(Effect):
     def _checkpoints(effect):
         for c in EndTurnOrder.checkpoints:
-            yield c, EndTurnOrder.end_tier_effect, 0, 0
+            yield c, EndTurnOrder.end_tier_effect, 0, 0, 0
 
     @Effect.orderkey(_checkpoints)
     def end_turn(self, field):

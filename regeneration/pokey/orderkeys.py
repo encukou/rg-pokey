@@ -122,12 +122,14 @@ class EndTurnOrder(object):
         major_tier, minor_tier = major_minor
         def key(effect):
             try:
-                speed = effect.subject.stats.speed
+                spot = effect.subject.spot
             except AttributeError:
-                return major_tier, minor_tier
+                turn_order = speed = 0
             else:
-                speed *= Effect.speed_factor(effect, 1)
-                return major_tier, EndTurnOrder.tier_effect, -speed, minor_tier
+                turn_order = spot.turn_order
+                speed = spot.battler.stats.speed * Effect.speed_factor(spot, 1)
+            return (major_tier, EndTurnOrder.tier_effect, -speed, turn_order,
+                    minor_tier)
         return Effect.orderkey(key)
 
 class SwitchInDamage(object):
