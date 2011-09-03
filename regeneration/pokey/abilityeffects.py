@@ -272,7 +272,9 @@ class Synchronize(AbilityEffect):
 class Technician(AbilityEffect):
     @Effect.orderkey(orderkeys.DamageModifierOrder.user_ability)
     def modify_base_power(self, hit, power):
-        if hit.user is self.subject and hit.move_effect.power <= 60:
+        confusion_pseudomove = effects.Confusion.ConfusionHurtEffect
+        if (hit.user is self.subject and hit.move_effect.power <= 60 and
+                not isinstance(hit.move_effect, confusion_pseudomove)):
             return power * 3 // 2
         else:
             return power
