@@ -57,11 +57,10 @@ class StatusMove(MoveEffect):
 
 class SecondaryStatusMove(MoveEffect):
     def do_secondary_effect(self, hit):
-        if not hit.target.fainted:
-            effect_class = self.effect_class
-            self.user.give_effect(hit.target, effect_class(verbose=False),
-                    message_class=effect_class.messages.Applied,
-                    battler=hit.target)
+        effect_class = self.effect_class
+        self.user.give_effect(hit.target, effect_class(verbose=False),
+                message_class=effect_class.messages.Applied,
+                battler=hit.target)
 
 @registry.put(1)
 class Tackle(MoveEffect):
