@@ -76,12 +76,14 @@ class Download(AbilityEffect):
 @register
 class ColorChange(AbilityEffect):
     @Effect.orderkey(orderkeys.DamageReactionOrder.target_ability)
-    def move_damage_done(self, hit):
-        if (hit.target is self.subject and hit.type and
-                [hit.type] != self.subject.types):
-            self.subject.types = [hit.type]
-            self.field.message.ColorChange(battler=self.subject,
-                    ability=self.ability, type=hit.type)
+    def move_hits_done(self, move, hits):
+        for hit in hits:
+            if (hit.target is self.subject and hit.damage and hit.type and
+                    [hit.type] != self.subject.types):
+                self.subject.types = [hit.type]
+                self.field.message.ColorChange(battler=self.subject,
+                        ability=self.ability, type=hit.type)
+                break
 
 @register
 class Frisk(AbilityEffect):
