@@ -177,13 +177,16 @@ class SharpBeak(TypeBoostItem):
 @register
 class ShellBell(ItemEffect):
     @Effect.orderkey(DamageReactionOrder.user_item)
-    def move_damage_done(self, hit):
+    def move_hits_done(self, move_effect, hits):
         subject = self.subject
-        if (hit.user is subject and hit.target is not subject and
+        if (hits and move_effect.user is subject and
+                move_effect.target is not subject and
                 subject.hp < subject.stats.hp):
-            heal_amount = (hit.damage // 8) or 1
-            subject.change_hp(heal_amount, message_class=messages.ItemHeal,
-                    item=self.item)
+            heal_amount = (sum(hit.damage for hit in hits) // 8) or 1
+            if heal_amount:
+                print heal_amount, subject.hp, subject.stats.hp
+                subject.change_hp(heal_amount, message_class=messages.ItemHeal,
+                        item=self.item)
 
 @register
 class LaxIncense(ItemEffect):
