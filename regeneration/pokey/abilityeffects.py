@@ -224,20 +224,21 @@ class Soundproof(AbilityEffect):
 
 @register
 class Static(AbilityEffect):
-    @Effect.orderkey(orderkeys.MoveHitsDoneOrder.target_ability)
-    def move_hits_done(self, move_effect, hits):
-        if (hits and move_effect.target is self.subject and
-                move_effect.move_effect.move and
-                move_effect.move_effect.move.flags.contact and
-                self.field.flip_coin(Fraction(1, 10), 'Static activation')):
-            effect = self.subject.give_effect(move_effect.user,
+    active_on_fainted_subject = True
+    @Effect.orderkey(orderkeys.DamageReactionOrder.target_ability)
+    def move_damage_done(self, hit):
+        move_effect = hit.move_effect
+        if (hit.target is self.subject and
+                move_effect.move and move_effect.move.flags.contact and
+                self.field.flip_coin(Fraction(3, 10), 'Static activation')):
+            effect = self.subject.give_effect(hit.user,
                     effects.Paralysis())
             if effect:
                 self.field.message.ContactAilmentAbility(
-                        battler=move_effect.target, ability=self.ability,
-                        subject=move_effect.user)
+                        battler=hit.target, ability=self.ability,
+                        subject=hit.user)
                 self.field.message(effect.messages.Applied,
-                        battler=move_effect.user)
+                        battler=hit.user)
 
 @register
 class Sturdy(AbilityEffect):
