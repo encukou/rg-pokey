@@ -143,6 +143,48 @@ class AnnounceOrder(object):
     # XXX: Is it really true?
     item, ability = OrderKeys(2)
 
+class MoveHitsDoneOrder(object):
+    # On http://upokecenter.dreamhosters.com/games/bw/guides/timing.php,
+    # there are two lists.
+
+    _keys = OrderKeys()
+
+    # Most "attack is successful" effects [i.e. MoveEffects.use()/.hit()]
+    # Additional effects [i.e. MoveEffects.use()/.hit()]
+    # Items with a "when" trigger condition can trigger here
+    # Grudge/Rage
+    grudge_rage = _keys.new_last()
+    # Most Ability effects
+    target_ability = _keys.new_last()
+    # Items with a "when" trigger condition can trigger here
+    # Most item effects (including Air Balloon)
+    item_effects = _keys.new_last()
+    # Items with a "when" trigger condition can trigger here
+    # Opponent faints if it has 0 HP
+    faint = _keys.new_last()
+    # Destiny Bond if opponent fainted
+    destiny_bond = _keys.new_last()
+    # Recoil damage/Struggle
+    recoil = _keys.new_last()
+    # Items with a "when" trigger condition can trigger here
+    # Attacker's Shell Bell
+    shell_bell = _keys.new_last()
+    # Opponent thaws out if attack is a Fire-type attack
+    thaw = _keys.new_last()
+    # Rapid Spin/Circle Throw/Dragon Tail/Pluck/Bug Bite/SmellingSalt/Wake-Up Slap/Thief (only if attacker hasn't fainted)
+    #       [i.e. MoveEffects.use()/.hit() - after super call]
+
+    ## AFTER ALL HITS ##
+
+    # a Color Change
+    # i Red Card (only if attacker and item's holder haven't fainted)
+    # i Eject Button message (only if item's holder hasn't fainted; if more than one target's Eject Button could trigger, only the first such target in turn order triggers).
+    # i Shell Bell/Life Orb (only if attacker hasn't fainted)
+    # i Eject Button effect (only if item's holder hasn't fainted). If effect happens, the U-turn message/effect doesn't happen.
+    # m U-turn message (only if attacker hasn't fainted)
+    # a Pickpocket (only if the Ability's bearer hasn't fainted)
+    # m U-turn effect (only if attacker hasn't fainted)
+
 class DamageReactionOrder(object):
     # XXX: Is it really true?
     status, user_item, target_item, target_ability = OrderKeys(4)

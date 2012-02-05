@@ -10,7 +10,7 @@ from regeneration.pokey import messages
 from regeneration.pokey import effects
 from regeneration.pokey.registry import EntityRegistry
 from regeneration.pokey.orderkeys import (EndTurnOrder, DamageModifierOrder,
-        AnnounceOrder, DamageReactionOrder)
+        AnnounceOrder, DamageReactionOrder, MoveHitsDoneOrder)
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
 __license__ = 'MIT'
@@ -176,7 +176,7 @@ class SharpBeak(TypeBoostItem):
 
 @register
 class ShellBell(ItemEffect):
-    @Effect.orderkey(DamageReactionOrder.user_item)
+    @Effect.orderkey(MoveHitsDoneOrder.shell_bell)
     def move_hits_done(self, move_effect, hits):
         subject = self.subject
         if (hits and move_effect.user is subject and

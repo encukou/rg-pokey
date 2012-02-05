@@ -7,7 +7,7 @@ from regeneration.battle.effect import Effect
 from regeneration.battle.moveeffect import MoveEffect, Hit
 
 from regeneration.pokey import orderkeys
-from regeneration.pokey.orderkeys import EndTurnOrder
+from regeneration.pokey.orderkeys import EndTurnOrder, MoveHitsDoneOrder
 from regeneration.pokey import messages
 
 __copyright__ = 'Copyright 2009-2011, Petr Viktorin'
@@ -147,10 +147,10 @@ class Freeze(MajorAilment):
                 self.field.message(self.messages.PreventUse, battler=subject)
                 return True
 
-    @Effect.orderkey(orderkeys.DamageReactionOrder.status)
-    def move_damage_done(self, hit):
-        if (hit.target is self.subject and
-                hit.type and hit.type.identifier == 'fire'):
+    @Effect.orderkey(orderkeys.MoveHitsDoneOrder.thaw)
+    def move_hits_done(self, move_effect, hits):
+        if (hits and move_effect.target is self.subject and
+                move_effect.type and move_effect.type.identifier == 'fire'):
             self.defrost()
 
     def defrost(self):

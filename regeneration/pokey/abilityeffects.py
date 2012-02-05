@@ -75,7 +75,7 @@ class Download(AbilityEffect):
 
 @register
 class ColorChange(AbilityEffect):
-    @Effect.orderkey(orderkeys.DamageReactionOrder.target_ability)
+    @Effect.orderkey(orderkeys.MoveHitsDoneOrder.target_ability)
     def move_hits_done(self, move, hits):
         for hit in hits:
             if (hit.target is self.subject and hit.damage and hit.type and
@@ -224,17 +224,20 @@ class Soundproof(AbilityEffect):
 
 @register
 class Static(AbilityEffect):
-    @Effect.orderkey(orderkeys.DamageReactionOrder.target_ability)
-    def move_damage_done(self, hit):
-        if (hit.target is self.subject and hit.move_effect.move and
-                hit.move_effect.move.flags.contact and
+    @Effect.orderkey(orderkeys.MoveHitsDoneOrder.target_ability)
+    def move_hits_done(self, move_effect, hits):
+        if (hits and move_effect.target is self.subject and
+                move_effect.move_effect.move and
+                move_effect.move_effect.move.flags.contact and
                 self.field.flip_coin(Fraction(1, 10), 'Static activation')):
-            effect = self.subject.give_effect(hit.user, effects.Paralysis())
+            effect = self.subject.give_effect(move_effect.user,
+                    effects.Paralysis())
             if effect:
-                self.field.message.ContactAilmentAbility(battler=hit.target,
-                        ability=self.ability, subject=hit.user)
+                self.field.message.ContactAilmentAbility(
+                        battler=move_effect.target, ability=self.ability,
+                        subject=move_effect.user)
                 self.field.message(effect.messages.Applied,
-                        battler=hit.user)
+                        battler=move_effect.user)
 
 @register
 class Sturdy(AbilityEffect):
